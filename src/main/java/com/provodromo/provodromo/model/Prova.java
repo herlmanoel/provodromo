@@ -13,8 +13,10 @@ import java.util.Set;
 @Data
 public class Prova extends BaseModel {
 
-    private String nome;
-    private String data;
+    private String titulo;
+    private String dataInicio;
+    private String dataFim;
+    private int nota;
 
     @ManyToOne
     @JoinColumn(name = "criador_id")
