@@ -17,26 +17,26 @@ public class UsuarioController {
     @GetMapping("/listar")
     public String listarUsuarios(Model model) {
         model.addAttribute("usuarios", usuarioService.findAll());
-        return "usuario/listar"; // Nome do arquivo HTML/Thymeleaf
+        return "usuario/listar";
     }
 
     @GetMapping("/novo")
     public String novoUsuarioForm(Model model) {
         model.addAttribute("usuario", new Usuario());
-        return "usuario/form"; // Nome do arquivo HTML/Thymeleaf para o formulário
+        return "usuario/form";
     }
 
     @PostMapping("/salvar")
     public String salvarUsuario(@ModelAttribute Usuario usuario) {
         usuarioService.save(usuario);
-        return "redirect:/usuario/listar"; // Redirecionar para a página de listagem após a criação
+        return "redirect:/usuario/listar";
     }
 
     @GetMapping("/editar/{id}")
     public String editarUsuarioForm(@PathVariable Long id, Model model) {
         Usuario usuario = usuarioService.findById(id);
         model.addAttribute("usuario", usuario);
-        return "usuario/form"; // Nome do arquivo HTML/Thymeleaf para o formulário de edição
+        return "usuario/form";
     }
 
     @PostMapping("/atualizar/{id}")
