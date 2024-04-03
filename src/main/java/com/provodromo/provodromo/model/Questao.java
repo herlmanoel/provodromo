@@ -16,6 +16,7 @@ public class Questao extends BaseModel {
 
     private String texto;
     private String dificuldade;
+    private double nota;
 
     @ManyToMany(mappedBy = "questoes")
     @EqualsAndHashCode.Exclude
