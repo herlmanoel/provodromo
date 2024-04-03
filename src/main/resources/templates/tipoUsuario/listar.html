@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listar Tipos de Usuários</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="border-b">
+    <div class="container px-4 flex items-center h-14">
+        <a href="#" class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none">
+            Usuários
+        </a>
+        <a href="#" class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Provas
+        </a>
+        <a href="#" class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Questões
+        </a>
+    </div>
+</div>
+
+
+<div class="flex flex-col gap-4 items-center mt-4">
+    <div class="flex items-center gap-8">
+        <h1 class="text-2xl font-bold">Tipos de Usuários</h1>
+        <a th:href="@{/tipoUsuario/novo}"
+           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+            Cadastrar
+        </a>
+    </div>
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm" data-v0-t="card">
+        <div class="p-0">
+            <div class="relative w-full overflow-auto">
+                <table class="w-full caption-bottom text-sm">
+                    <thead class="[&amp;_tr]:border-b">
+                    <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0 w-1/2">
+                            Nome
+                        </th>
+                        <th class="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                            Ações
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="[&amp;_tr:last-child]:border-0">
+                    <tr th:each="tipoUsuario : ${tiposUsuarios}"
+                        class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                        <td
+                                th:text="${tipoUsuario.nome}"
+                                class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 font-medium flex items-center w-1/2">
+
+                        </td>
+
+                        <td class="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0 flex gap-2 text-right">
+                            <a th:href="@{/tipoUsuario/editar/{id}(id=${tipoUsuario.id})}"
+                               class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="h-4 w-4">
+                                    <path d="M4 13.5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l.99-3.95 5.43-5.44Z"></path>
+                                </svg>
+                                <span class="sr-only">Editar</span>
+                            </a>
+                            <a th:href="@{/tipoUsuario/excluir/{id}(id=${tipoUsuario.id})}"
+                               class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="h-4 w-4">
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                </svg>
+                                <span class="sr-only">Excluir</span>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
