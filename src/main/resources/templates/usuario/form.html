@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Usuário</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="mx-auto max-w-sm space-y-6">
+    <div class="text-center space-y-2">
+        <h1 class="text-3xl font-bold">Formulário de Usuário</h1>
+        <p class="text-gray-500 dark:text-gray-400">Entre com as informações da sua conta.</p>
+    </div>
+    <form th:action="@{/usuario/salvar}" th:object="${usuario}" method="post" class="space-y-4">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="space-y-2">
+            <label
+                    class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
+                    for="name">Name</label>
+            <input
+                    class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="name"
+                    placeholder="Enter your name"
+                    required=""
+                    th:field="*{nome}"
+            />
+        </div>
+        <div class="space-y-2">
+            <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
+                   for="email">Email</label>
+            <input
+                    class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="email"
+                    placeholder="Enter your email"
+                    required=""
+                    th:field="*{email}"
+            />
+        </div>
+        <div class="space-y-2">
+            <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
+                   for="password">Password</label>
+            <input
+                    class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    id="password"
+                    required=""
+                    type="password"
+                    th:field="*{senha}"
+            />
+        </div>
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <label for="user_type" class="text-sm font-medium leading-none">
+                Tipo de usuário
+            </label>
+            <div class="relative">
+                <select
+                        id="user_type"
+                        name="user_type"
+                        class="block appearance-none w-full bg-white border border-gray-300 rounded-md py-2 px-3 leading-tight focus:outline-none focus:border-blue-500"
+                        onchange="updateButtonText(this.value)"
+                >
+                    <option value="">Selecione um tipo</option>
+                    <option value="admin">Admin</option>
+                    <option value="manager">Manager</option>
+                    <option value="employee">Employee</option>
+                    <option value="guest">Guest</option>
+                </select>
+            </div>
+        </div>
+
+        <script>
+            function updateButtonText(value) {
+                const button = document.querySelector('button[aria-controls="radix-:rj:"]');
+                button.textContent = value ? value : 'Select a user type';
+            }
+        </script>
+
+        <button
+                class="inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                type="submit"
+        >
+            Sign Up
+        </button>
+    </form>
+</div>
+</body>
+</html>
