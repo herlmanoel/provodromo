@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import java.util.HashSet;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tb_questao")
 @Data
