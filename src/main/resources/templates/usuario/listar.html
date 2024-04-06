@@ -8,8 +8,14 @@
 <body>
 <div class="border-b">
     <div class="container px-4 flex items-center h-14">
-        <a href="#"
-           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none">
+        <a
+                th:href="@{/}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Módulos
+        </a>
+        <a
+                th:href="@{/usuario/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
             Usuários
         </a>
         <a href="#"
@@ -19,6 +25,10 @@
         <a href="#"
            class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
             Questões
+        </a>
+        <a th:href="@{/tipoUsuario/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Tipos de Usuários
         </a>
     </div>
 </div>

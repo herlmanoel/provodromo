@@ -6,7 +6,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-
+<div class="border-b">
+    <div class="container px-4 flex items-center h-14">
+        <a
+                th:href="@{/}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Módulos
+        </a>
+        <a
+                th:href="@{/usuario/listar}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Usuários
+        </a>
+        <a href="#"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Provas
+        </a>
+        <a href="#"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Questões
+        </a>
+        <a th:href="@{/tipoUsuario/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Tipos de Usuários
+        </a>
+    </div>
+</div>
 <div class="min-h-screen flex justify-center">
     <!--  container  -->
     <div class="p-8 w-5/6 w-5/6 md:w-2/3 lg:w-4/5 xl:w-4/5">
