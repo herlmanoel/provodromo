@@ -1,6 +1,7 @@
-package com.provodromo.provodromo.controller;
+ package com.provodromo.provodromo.controller;
 
 import com.provodromo.provodromo.model.Usuario;
+import com.provodromo.provodromo.service.TipoUsuarioService;
 import com.provodromo.provodromo.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,41 +15,41 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private TipoUsuarioService tipoUsuarioService;
+
     @GetMapping("/listar")
-    public String listarUsuarios(Model model) {
+    public String listar(Model model) {
         model.addAttribute("usuarios", usuarioService.findAll());
         return "usuario/listar";
     }
 
     @GetMapping("/novo")
-    public String novoUsuarioForm(Model model) {
-        model.addAttribute("usuario", new Usuario());
+    public String novo(@RequestParam(required = false) Long id, Model model) {
+        Usuario usuario = id != null ? usuarioService.findById(id) : new Usuario();
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("tiposUsuarios", tipoUsuarioService.findAll());
         return "usuario/form";
     }
 
     @PostMapping("/salvar")
-    public String salvarUsuario(@ModelAttribute Usuario usuario) {
+    public String salvar(@ModelAttribute Usuario usuario) {
         usuarioService.save(usuario);
         return "redirect:/usuario/listar";
     }
 
     @GetMapping("/editar/{id}")
-    public String editarUsuarioForm(@PathVariable Long id, Model model) {
+    public String editar(@PathVariable Long id, Model model) {
         Usuario usuario = usuarioService.findById(id);
         model.addAttribute("usuario", usuario);
+        model.addAttribute("tiposUsuarios", tipoUsuarioService.findAll());
         return "usuario/form";
     }
 
-    @PostMapping("/atualizar/{id}")
-    public String atualizarUsuario(@PathVariable Long id, @ModelAttribute Usuario usuario) {
-        usuario.setId(id); // Certifique-se de que o ID está definido corretamente
-        usuarioService.save(usuario);
-        return "redirect:/usuario/listar"; // Redirecionar para a página de listagem após a atualização
-    }
-
     @GetMapping("/excluir/{id}")
-    public String excluirUsuario(@PathVariable Long id) {
+    public String excluir(@PathVariable Long id) {
         usuarioService.deleteById(id);
-        return "redirect:/usuario/listar"; // Redirecionar para a página de listagem após a exclusão
+        return "redirect:/usuario/listar";
     }
 }
+
