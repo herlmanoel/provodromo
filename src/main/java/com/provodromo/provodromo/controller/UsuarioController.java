@@ -1,5 +1,6 @@
  package com.provodromo.provodromo.controller;
 
+import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
 import com.provodromo.provodromo.service.TipoUsuarioService;
 import com.provodromo.provodromo.service.UsuarioService;
@@ -34,6 +35,8 @@ public class UsuarioController {
 
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute Usuario usuario) {
+        TipoUsuario tipoUsuario = tipoUsuarioService.findById(usuario.getTipoUsuario().getId());
+        usuario.setTipoUsuario(tipoUsuario);
         usuarioService.save(usuario);
         return "redirect:/usuario/listar";
     }
