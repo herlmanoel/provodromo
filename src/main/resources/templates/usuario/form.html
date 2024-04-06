@@ -19,9 +19,8 @@
                 <form th:action="@{/usuario/salvar}" th:object="${usuario}" method="post" class="space-y-4">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="space-y-2">
-                        <label
-                                class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
-                                for="name">Name</label>
+                        <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
+                               for="name">Name</label>
                         <input
                                 class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 id="name"
@@ -43,12 +42,12 @@
                     </div>
                     <div class="space-y-2">
                         <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
-                               for="password">Password</label>
+                               for="password">Senha</label>
                         <input
                                 class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 id="password"
                                 required=""
-                                type="password"
+                                type="text"
                                 th:field="*{senha}"
                         />
                     </div>
@@ -57,17 +56,15 @@
                             Tipo de usuário
                         </label>
                         <div class="relative">
-                            <select
-                                    id="user_type"
-                                    name="user_type"
+                            <select id="user_type" name="user_type"
                                     class="block appearance-none w-full bg-white border border-gray-300 rounded-md py-2 px-3 leading-tight focus:outline-none focus:border-blue-500"
-                                    onchange="updateButtonText(this.value)"
-                            >
+                                    onchange="updateButtonText(this.value)">
                                 <option value="">Selecione um tipo</option>
-                                <option value="admin">Admin</option>
-                                <option value="manager">Manager</option>
-                                <option value="employee">Employee</option>
-                                <option value="guest">Guest</option>
+                                <option th:each="tipoUsuario : ${tiposUsuarios}"
+                                        th:value="${tipoUsuario.id}"
+                                        th:text="${tipoUsuario.nome}"
+                                        th:selected="${usuario.tipoUsuario != null and tipoUsuario.id eq usuario.tipoUsuario?.id}">
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -83,14 +80,12 @@
                             class="inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                             type="submit"
                     >
-                        Sign Up
+                        Submeter
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-
 </body>
 </html>
