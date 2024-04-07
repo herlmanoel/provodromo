@@ -16,6 +16,11 @@ public class Prova extends BaseModel {
     private String titulo;
     private String dataInicio;
     private String dataFim;
+
+    @ManyToOne
+    @JoinColumn(name = "turma_id")
+    private Turma turma;
+
     private int nota;
 
     @ManyToOne
