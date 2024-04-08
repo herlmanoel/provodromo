@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Listar Questões</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="border-b">
+    <div class="container px-4 flex items-center h-14">
+        <a
+                th:href="@{/}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Módulos
+        </a>
+        <a
+                th:href="@{/usuario/listar}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Usuários
+        </a>
+        <a th:href="@{/prova/listarProvas}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Provas
+        </a>
+        <a th:href="@{/questao/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Questões
+        </a>
+        <a th:href="@{/tipoUsuario/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Tipos de Usuários
+        </a>
+    </div>
+</div>
+<div class="min-h-screen flex justify-center">
+<!--  container  -->
+    <div class="p-8 w-5/6 w-5/6 md:w-2/3 lg:w-4/5 xl:w-4/5">
+        <div class="flex items-center justify-between gap-8 p-4 md:p-6">
+            <h1 class="text-2xl font-bold">Questões</h1>
+            <a th:href="@{/questao/novo}"
+               class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                Cadastrar
+            </a>
+        </div>
+        <div class="grid grid-cols-1 gap-4 p-4 md:p-6">
+            <!--      item      -->
+            <div class="border border-gray-200 rounded-lg" th:each="questao : ${questoes}">
+                <div class="p-4">
+                    <div class="flex items-center gap-4">
+                        <div class="grid gap-1.5">
+                            <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${questao.texto}">
+                                eve@example.
+                            </p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${questao.dificuldade}">
+                                eve@example.
+                            </p>
+                        </div>
+                        <div class="ml-auto flex space-x-2">
+                            <a th:href="@{/questao/editar/{id}(id=${questao.id})}" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="w-4 h-4">
+                                    <path d="M4 13.5V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L7.95 21 4 22l.99-3.95 5.43-5.44Z"></path>
+                                </svg>
+                                <span class="sr-only">Edit</span>
+                            </a>
+                            <a th:href="@{/questao/excluir/{id}(id=${questao.id})}" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="w-4 h-4">
+                                    <path d="M3 6h18"></path>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                                </svg>
+                                <span class="sr-only">Delete</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

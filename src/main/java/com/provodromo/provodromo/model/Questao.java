@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -18,7 +20,6 @@ public class Questao extends BaseModel {
     private String dificuldade;
     private double nota;
 
-    @ManyToMany(mappedBy = "questoes")
-    @EqualsAndHashCode.Exclude
-    private Set<Prova> provas = new HashSet<>();
+    @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Alternativa> alternativas = new ArrayList<>();
 }

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário de Questão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="border-b">
+    <div class="container px-4 flex items-center h-14">
+        <a
+                th:href="@{/}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Módulos
+        </a>
+        <a
+                th:href="@{/usuario/listar}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Usuários
+        </a>
+        <a th:href="@{/prova/listarProvas}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Provas
+        </a>
+        <a th:href="@{/questao/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Questões
+        </a>
+        <a th:href="@{/tipoUsuario/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Tipos de Usuários
+        </a>
+    </div>
+</div>
+<div class="min-h-screen flex justify-center">
+    <!--  container  -->
+    <div class="p-8 w-5/6 w-5/6 md:w-2/3 lg:w-4/5 xl:w-4/5">
+        <div class="flex items-center justify-between gap-8 p-4 md:p-6">
+            <div class="mx-auto max-w-sm space-y-6">
+                <div class="text-center space-y-2">
+                    <h1 class="text-3xl font-bold">Formulário de Questão</h1>
+                    <p class="text-gray-500 dark:text-gray-400">Entre com as informações da questão que deseja cadastrar.</p>
+                </div>
+                <form th:action="@{/questao/salvar}" th:object="${questao}" method="post" class="space-y-4">
+                    <input type="hidden" th:field="*{id}"/>
+                    <div class="space-y-2">
+                        <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
+                               for="enunciado">Enunciado</label>
+                        <textarea
+                                class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                id="enunciado"
+                                placeholder="Insira o enunciado da questão"
+                                required=""
+                                th:field="*{texto}">
+                        </textarea>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
+                               for="dificuldade">Dificuldade</label>
+                        <input th:field="*{dificuldade}" class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                               id="dificuldade" />
+                    </div>
+
+                    <label
+                            class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"
+                    >
+                        Alternativas
+                    </label>
+                    <div class="grid gap-2">
+                        <div class="grid grid-cols-[minmax(0px,1fr)] items-center gap-2">
+                            <input type="hidden" th:field="*{alternativas[0].id}"/>
+                            <input type="hidden" th:field="*{alternativas[0].questao.id}"/>
+                            <input
+                                    type="checkbox"
+                                    class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                    name="alternative"
+                                    th:value="true"
+                                    th:field="*{alternativas[0].correta}"
+                                    th:checked="${questao.alternativas[0].correta}"
+                            >
+                            <div class="w-full">
+                                <input
+                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        th:field="*{alternativas[0].texto}"
+                                        placeholder="Escreva a primeira alternativa"
+                                />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-[minmax(0px,1fr)] items-center gap-2">
+                            <input type="hidden" th:field="*{alternativas[1].id}"/>
+                            <input type="hidden" th:field="*{alternativas[1].questao.id}"/>
+                            <input
+                                    type="checkbox"
+                                    class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                    name="alternative"
+                                    th:value="true"
+                                    th:field="*{alternativas[1].correta}"
+                                    th:checked="${questao.alternativas[1].correta}"
+                            >
+                            <div class="w-full">
+                                <input
+                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        th:field="*{alternativas[1].texto}"
+                                        placeholder="Escreva a segunda alternativa"
+                                />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-[minmax(0px,1fr)] items-center gap-2">
+                            <input type="hidden" th:field="*{alternativas[2].id}"/>
+                            <input type="hidden" th:field="*{alternativas[2].questao.id}"/>
+                            <input
+                                    type="checkbox"
+                                    class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                    name="alternative"
+                                    th:value="true"
+                                    th:field="*{alternativas[2].correta}"
+                                    th:checked="${questao.alternativas[2].correta}"
+                            >
+                            <div class="w-full">
+                                <input
+                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        th:field="*{alternativas[2].texto}"
+                                        placeholder="Escreva a terceira alternativa"
+                                />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-[minmax(0px,1fr)] items-center gap-2">
+                            <input type="hidden" th:field="*{alternativas[3].id}"/>
+                            <input type="hidden" th:field="*{alternativas[3].questao.id}"/>
+                            <input
+                                    type="checkbox"
+                                    class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                                    name="alternative"
+                                    th:value="true"
+                                    th:field="*{alternativas[3].correta}"
+                                    th:checked="${questao.alternativas[3].correta}"
+                            >
+                            <div class="w-full">
+                                <input
+                                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                        th:field="*{alternativas[3].texto}"
+                                        placeholder="Escreva a quarta alternativa"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <button
+                            class="inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                            type="submit"
+                    >
+                        Submeter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full min-h-[100dvh]" data-v0-t="card">-->
+<!--    <div class="flex flex-col space-y-1.5 p-6 bg-gray-100 dark:bg-gray-800">-->
+<!--        <div class="flex items-center gap-4">-->
+<!--            <h2 class="text-lg font-semibold"></h2>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <form th:action="@{/questao/salvar}" th:object="${questao}" method="post" class="space-y-4">-->
+<!--        <input type="hidden" th:field="*{id}"/>-->
+<!--        <div class="p-0">-->
+<!--            <div class="grid gap-4 p-6">-->
+<!--                <div class="grid gap-4">-->
+<!--                    <label-->
+<!--                            class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"-->
+<!--                            for="question"-->
+<!--                    >-->
+<!--                        Questão-->
+<!--                    </label>-->
+<!--                    <textarea-->
+<!--                            th:field="*{texto}"-->
+<!--                            class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[100px]"-->
+<!--                            id="question"-->
+<!--                            placeholder="Escreva o enunciado da questão."-->
+<!--                    ></textarea>-->
+<!--                </div>-->
+<!--                <div class="grid gap-4">-->
+<!--                    <label-->
+<!--                            class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-medium"-->
+<!--                            for="dificuldade"-->
+<!--                    >-->
+<!--                        Dificuldade-->
+<!--                    </label>-->
+<!--                    <input-->
+<!--                            th:field="*{dificuldade}"-->
+<!--                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"-->
+<!--                            id="dificuldade"-->
+<!--                            placeholder="Escreva a dificuldade da questão"-->
+<!--                    />-->
+<!--                </div>-->
+<!--                <div class="grid gap-4">-->
+<!--                    -->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="flex items-center p-6 bg-gray-100 dark:bg-gray-800">-->
+<!--            <button type="submit" class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 rounded-md px-8">-->
+<!--                Salvar-->
+<!--            </button>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--</div>-->
+</body>
+</html>

@@ -10,9 +10,9 @@ import lombok.Data;
 public class Alternativa extends BaseModel {
 
     private String texto;
-    private boolean correta;
+    private boolean correta = false;
 
     @ManyToOne
-    @JoinColumn(name = "prova_id")
-    private Prova prova;
+    @JoinColumn(name = "questao_id")
+    private Questao questao;
 }
