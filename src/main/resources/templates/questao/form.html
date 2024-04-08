@@ -205,5 +205,22 @@
 <!--        </div>-->
 <!--    </form>-->
 <!--</div>-->
+<script>
+    function uncheckOthers(checkbox) {
+        let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(function(cb) {
+            if (cb !== checkbox && cb.checked) {
+                cb.checked = false;
+            }
+        });
+    }
+
+    let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('click', function() {
+            uncheckOthers(checkbox);
+        });
+    });
+</script>
 </body>
 </html>
