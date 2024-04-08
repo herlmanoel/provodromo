@@ -1,12 +1,19 @@
 package com.provodromo.provodromo;
 
+import com.provodromo.provodromo.model.Alternativa;
+import com.provodromo.provodromo.model.Questao;
 import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
+import com.provodromo.provodromo.repository.AlternativaRepository;
+import com.provodromo.provodromo.repository.QuestaoRepository;
 import com.provodromo.provodromo.repository.TipoUsuarioRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class SeedData implements CommandLineRunner {
@@ -17,10 +24,40 @@ public class SeedData implements CommandLineRunner {
     @Autowired
     private TipoUsuarioRepository tipoUsuarioRepository;
 
+    @Autowired
+    private QuestaoRepository questaoRepository;
+
     @Override
     public void run(String... args) throws Exception {
         seedTiposUsuario();
         seedUsuarios();
+
+        for (int i = 1; i <= 5; i++) {
+            Questao questao = new Questao();
+            questao.setTexto("Questão " + i);
+            questao.setDificuldade("Difícil");
+            questao.setNota(10.0);
+
+            List<Alternativa> alternativas = Arrays.asList(
+                    criarAlternativa("Alternativa A", true),
+                    criarAlternativa("Alternativa B", false),
+                    criarAlternativa("Alternativa C", false),
+                    criarAlternativa("Alternativa D", false)
+            );
+
+            alternativas.forEach(alt -> alt.setQuestao(questao));
+            questao.setAlternativas(alternativas);
+
+            questaoRepository.save(questao);
+        }
+    }
+
+
+    private Alternativa criarAlternativa(String texto, boolean correta) {
+        Alternativa alternativa = new Alternativa();
+        alternativa.setTexto(texto);
+        alternativa.setCorreta(correta);
+        return alternativa;
     }
 
     private void seedUsuarios() {
