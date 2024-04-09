@@ -2,6 +2,7 @@ package com.provodromo.provodromo.controller;
 
 import com.provodromo.provodromo.model.Prova;
 import com.provodromo.provodromo.service.ProvaService;
+import com.provodromo.provodromo.service.QuestaoService;
 import com.provodromo.provodromo.service.TurmaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,10 @@ public class ProvaController {
 
     @Autowired
     private TurmaService turmaService;
+
+    @Autowired
+    private QuestaoService questaoService;
+
     @GetMapping("/listar")
     public String listarProvas(Model model) {
         model.addAttribute("provas" , provaService.findAll());
@@ -26,12 +31,14 @@ public class ProvaController {
     public String novaProvaFormulario(Model model) {
         model.addAttribute("prova", new Prova());
         model.addAttribute("turmas", turmaService.findAll());
+        model.addAttribute("questoes", questaoService.findAll());
+
 
         return "prova/form";
     }
 
     @PostMapping("/salvar")
-    public String salvarProva(@ModelAttribute Prova prova   ) {
+    public String salvarProva(@ModelAttribute Prova prova) {
         provaService.save(prova);
         return "redirect:/prova/listar";
     }
@@ -41,6 +48,8 @@ public class ProvaController {
         Prova prova = provaService.findById(id);
         model.addAttribute("prova", prova);
         model.addAttribute("turmas", turmaService.findAll());
+        model.addAttribute("questoes", questaoService.findAll());
+
         return "prova/form";
     }
 
@@ -61,6 +70,7 @@ public class ProvaController {
     public String visualizarProva(@PathVariable Long id, Model model) {
         Prova prova = provaService.findById(id);
         model.addAttribute("prova", prova);
+
         return "prova/visualizar";
     }
 
