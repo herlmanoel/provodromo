@@ -57,7 +57,8 @@
     <!--  container  -->
     <div class="text-center space-y-2">
         <h1 class="text-3xl font-bold" th:text="${prova.titulo}"></h1>
-        <p class="text-gray-500 dark:text-gray-400" th:text="'Turma: ' + ${prova.turma.nome} + ' - Professor: ' + ${prova.turma.professor.nome}"></p>
+        <p class="text-gray-500 dark:text-gray-400" th:text="'Turma: ' + ${prova.turma != null ? prova.turma.nome : 'Não possui'}
+        + ' - Professor: ' + ${prova.turma != null && prova.turma.professor != null? prova.turma.professor.nome : 'Não possui'}"></p>
     </div>
 
     <div class="p-8 w-5/6 w-5/6 md:w-2/3 lg:w-4/5 xl:w-4/5 self-center ">
