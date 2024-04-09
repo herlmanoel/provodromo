@@ -17,51 +17,44 @@ public class ProvaController {
 
     @Autowired
     private TurmaService turmaService;
-    @GetMapping("/listarProvas")
+    @GetMapping("/listar")
     public String listarProvas(Model model) {
         model.addAttribute("provas" , provaService.findAll());
-        return "prova/listarProvas";
+        return "prova/listar";
     }
-
-    //TODO filtrar procas
-    @GetMapping("/listarProvasAtivas")
-    public String listarProvasAtivas (Model model) {
-        model.addAttribute("provasAtivas", provaService.findAll());
-        return  "prova/listarProvas";
-    }
-
-    @GetMapping("/formularioProva")
+    @GetMapping("/form")
     public String novaProvaFormulario(Model model) {
         model.addAttribute("prova", new Prova());
         model.addAttribute("turmas", turmaService.findAll());
 
-        return "prova/formularioProva";
+        return "prova/form";
     }
 
-    @PostMapping("salvarProva")
-    public String salvarProva(@ModelAttribute Prova prova) {
+    @PostMapping("/salvar")
+    public String salvarProva(@ModelAttribute Prova prova   ) {
         provaService.save(prova);
-        return "prova/listarProvas";
+        return "redirect:/prova/listar";
     }
 
-    @GetMapping("/formularioEdicao/{id}")
+    @GetMapping("/editar/{id}")
     public String editarProvaFormulario(@PathVariable Long id, Model model) {
         Prova prova = provaService.findById(id);
         model.addAttribute("prova", prova);
-        return "prova/formularioProva";
+        model.addAttribute("turmas", turmaService.findAll());
+        return "prova/form";
     }
 
     @PostMapping("/editar/{id}")
     public String editarProva(@PathVariable Long id, Prova prova) {
         prova.setId(id);
         provaService.save(prova);
-        return "redirect:/prova/listarProva";
+        return "redirect:/prova/listar";
     }
 
     @GetMapping("/excluir/{id}")
     public String excluirProva(@PathVariable Long id, Model model) {
         provaService.deleteById(id);
-        return "redirect:/prova/listarProva";
+        return "redirect:/prova/listar";
     }
 
 }

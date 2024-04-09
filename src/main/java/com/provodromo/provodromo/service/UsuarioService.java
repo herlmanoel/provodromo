@@ -1,5 +1,6 @@
 package com.provodromo.provodromo.service;
 
+import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
 
 import java.util.Set;
@@ -35,4 +36,8 @@ public class UsuarioService implements BaseService<Usuario> {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    public Set<Usuario> findByTipoUsuario(Long id) {
+        return repository.findAllByTipoUsuarioId(id);
+    };
 }

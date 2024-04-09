@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Listar Usuários</title>
+    <title>Listar Provas</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -15,11 +15,12 @@
         </a>
         <a
                 th:href="@{/usuario/listar}"
-           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
             Usuários
         </a>
-        <a th:href="@{/prova/listar}"
-           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+        <a
+                th:href="@{/prova/listar}"
+                class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
             Provas
         </a>
         <a th:href="@{/questao/listar}"
@@ -34,33 +35,35 @@
 </div>
 
 <div class="min-h-screen flex justify-center">
-    <!--  container  -->
     <div class="p-8 w-5/6 w-5/6 md:w-2/3 lg:w-4/5 xl:w-4/5">
         <div class="flex items-center justify-between gap-8 p-4 md:p-6">
-            <h1 class="text-2xl font-bold">Usuários</h1>
-            <a th:href="@{/usuario/novo}"
-               class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+            <h1 class="text-2xl font-bold">Provas</h1>
+            <a
+                    th:href="@{/prova/form}"
+                    class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
                 Cadastrar
             </a>
         </div>
-<!--    listagem    -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 md:p-6">
-            <!-- item -->
-            <div class="border border-gray-200 rounded-lg" th:each="usuario : ${usuarios}">
+            <div
+                    class="border border-gray-200 rounded-lg"
+                    th:each="prova :${provas}"
+            >
                 <div class="p-4 flex flex-col">
                     <div class="grid gap-1.5">
-                        <h3 class="text-lg font-bold tracking-tight" th:text="${usuario.nome}">Eve Brown</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${usuario.email}">
-                            eve@example.
+                        <h3 class="text-lg font-bold tracking-tight" th:text="${prova.titulo}"></h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${prova.turma.professor.nome}+' - '+ ${prova.turma.nome}">
+                            Professor
                         </p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${usuario.tipoUsuario.nome}">
-                            eve@example.
+                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="'Nota máxima: ' + ${prova.nota}">
+                            Nota
                         </p>
                     </div>
                     <div class="flex-grow"></div>
                     <div class="flex justify-end space-x-2">
-                        <a th:href="@{/usuario/editar/{id}(id=${usuario.id})}"
-                           class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
+                        <a
+                                th:href="@{/prova/editar/{id}(id=${prova.id})}"
+                                class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="w-4 h-4">
@@ -70,7 +73,7 @@
                             </svg>
                             <span class="sr-only">Edit</span>
                         </a>
-                        <a th:href="@{/usuario/excluir/{id}(id=${usuario.id})}"
+                        <a th:href="@{/prova/excluir/{id}(id=${prova.id})}"
                            class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

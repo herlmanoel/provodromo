@@ -36,4 +36,6 @@ public class TipoUsuarioService implements BaseService<TipoUsuario> {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    public TipoUsuario findByName(String name) { return repository.findByName(name);}
 }

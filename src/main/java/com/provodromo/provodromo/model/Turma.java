@@ -16,4 +16,12 @@ public class Turma extends BaseModel {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario professor;
+
+    public Turma(String nome, Usuario professor) {
+        this.nome = nome;
+        this.professor = professor;
+    }
+
+    public Turma() {
+    }
 }

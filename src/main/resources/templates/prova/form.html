@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Formulário de Usuário</title>
+    <title>Formulário de Provas</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
@@ -22,6 +22,10 @@
            class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
             Provas
         </a>
+        <a th:href="@{/turma/listar}"
+           class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
+            Turmas
+        </a>
         <a th:href="@{/questao/listar}"
            class="inline-flex items-center h-full px-4 text-sm font-medium text-gray-500 hover:text-gray-900 focus:text-gray-900 focus:outline-none border-b-2 border-transparent hover:border-gray-900">
             Questões
@@ -36,71 +40,48 @@
     <!--  container  -->
     <div class="p-8 w-5/6 w-5/6 md:w-2/3 lg:w-4/5 xl:w-4/5">
         <div class="flex items-center justify-between gap-8 p-4 md:p-6">
-            <div class="mx-auto max-w-sm ,">
+            <div class="mx-auto max-w-sm space-y-6">
                 <div class="text-center space-y-2">
-                    <h1 class="text-3xl font-bold">Formulário de Usuário</h1>
-                    <p class="text-gray-500 dark:text-gray-400">Entre com as informações da sua conta.</p>
+                    <h1 class="text-3xl font-bold">Formulário de Provas</h1>
+                    <p class="text-gray-500 dark:text-gray-400">Entre com as informações da prova que deseja cadastrar.</p>
                 </div>
-                <form th:action="@{/usuario/salvar}" th:object="${usuario}" method="post" class="space-y-4">
+                <form th:action="@{/prova/salvar}" th:object="${prova}" method="post" class="space-y-4">
                     <input type="hidden" th:field="*{id}"/>
                     <div class="space-y-2">
                         <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
-                               for="name">Name</label>
+                               for="titulo">Titulo</label>
                         <input
                                 class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                id="name"
-                                placeholder="Enter your name"
-                                required=""
-                                th:field="*{nome}"
+                                id="titulo"
+                                placeholder="Insira o título da prova"
+                                required
+                                th:field="*{titulo}"
                         />
                     </div>
-                    <div class="space-y-2">
-                        <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
-                               for="email">Email</label>
-                        <input
-                                class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                id="email"
-                                placeholder="Enter your email"
-                                required=""
-                                th:field="*{email}"
-                        />
-                    </div>
-                    <div class="space-y-2">
-                        <label class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70"
-                               for="password">Senha</label>
-                        <input
-                                class="flex h-10 w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                id="password"
-                                required=""
-                                type="text"
-                                th:field="*{senha}"
-                        />
-                    </div>
+
                     <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
                         <label for="user_type" class="text-sm font-medium leading-none">
-                            Tipo de usuário
+                            Turma
                         </label>
                         <div class="relative">
                             <select id="user_type" name="user_type"
                                     class="block appearance-none w-full bg-white border border-gray-300 rounded-md py-2 px-3 leading-tight focus:outline-none focus:border-blue-500"
-                                    th:field="*{tipoUsuario.id}"
+                                    th:field="*{turma.id}"
                                     onchange="updateButtonText(this.value)">
-                                <option value="">Selecione um tipo</option>
-                                <option th:each="tipoUsuario : ${tiposUsuarios}"
-                                        th:value="${tipoUsuario.id}"
-                                        th:text="${tipoUsuario.nome}"
-                                        th:selected="${usuario.tipoUsuario != null and tipoUsuario.id == usuario.tipoUsuario?.id}">
+                                <option value="">Selecione uma turma</option>
+                                <option th:each="turma : ${turmas}"
+                                        th:value="${turma.id}"
+                                        th:text="${turma.nome}"
+                                        th:selected="${prova.turma != null and turma.id == prova.turma?.id}">
                                 </option>
                             </select>
                         </div>
                     </div>
-
-                    <script>
-                        function updateButtonText(value) {
-                            const button = document.querySelector('button[aria-controls="radix-:rj:"]');
-                            button.textContent = value ? value : 'Select a user type';
-                        }
-                    </script>
+                    <div class="space-y-2">
+                        <label for="nota" class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70">Selecione uma nota de 1 a 10</label>
+                        <input class="flex w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                               id="nota" name="Nota" type="number" min="1" max="10" th:field="*{nota}" required >
+                    </div>
 
                     <button
                             class="inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"

@@ -1,19 +1,15 @@
 package com.provodromo.provodromo;
 
-import com.provodromo.provodromo.model.Alternativa;
-import com.provodromo.provodromo.model.Questao;
-import com.provodromo.provodromo.model.TipoUsuario;
-import com.provodromo.provodromo.model.Usuario;
-import com.provodromo.provodromo.repository.AlternativaRepository;
-import com.provodromo.provodromo.repository.QuestaoRepository;
-import com.provodromo.provodromo.repository.TipoUsuarioRepository;
-import com.provodromo.provodromo.repository.UsuarioRepository;
+import com.provodromo.provodromo.model.*;
+import com.provodromo.provodromo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class SeedData implements CommandLineRunner {
@@ -27,10 +23,17 @@ public class SeedData implements CommandLineRunner {
     @Autowired
     private QuestaoRepository questaoRepository;
 
+    @Autowired
+    private TurmaRepository turmaRepository;
+
+    @Autowired
+    private  ProvaRepository provaRepository;
+
     @Override
     public void run(String... args) throws Exception {
         seedTiposUsuario();
         seedUsuarios();
+        seedTurma();
 
         for (int i = 1; i <= 5; i++) {
             Questao questao = new Questao();
@@ -50,6 +53,8 @@ public class SeedData implements CommandLineRunner {
 
             questaoRepository.save(questao);
         }
+
+        seedProva();
     }
 
 
@@ -60,6 +65,28 @@ public class SeedData implements CommandLineRunner {
         return alternativa;
     }
 
+    private void seedTurma() {
+        if (turmaRepository.findAll().isEmpty()){
+            Usuario professorGuilherme = usuarioRepository.findByNome("Guilherme");
+            Usuario professorGustavo = usuarioRepository.findByNome("Gustavo");
+            Turma turmaJava = new Turma("Java", professorGuilherme);
+            Turma turmaJogos = new Turma("Jogos", professorGustavo);
+            turmaRepository.save(turmaJava);
+            turmaRepository.save(turmaJogos);
+        }
+    };
+
+    private void seedProva() {
+        if (provaRepository.findAll().isEmpty()){
+            Turma turmaJogos = turmaRepository.findByNome("Jogos");
+            List<Questao> questoes = questaoRepository.findAll();
+            Set<Questao> questoesFinais = new HashSet<>(questoes);
+
+            Prova prova = new Prova("Avaliação 1", turmaJogos, 10, questoesFinais );
+            provaRepository.save(prova);
+        }
+    }
+
     private void seedUsuarios() {
         if (usuarioRepository.findAll().isEmpty()) {
             TipoUsuario tipoAdmin = tipoUsuarioRepository.findByName("Administrador");
@@ -67,13 +94,27 @@ public class SeedData implements CommandLineRunner {
             TipoUsuario tipoModerador = tipoUsuarioRepository.findByName("Moderador");
             TipoUsuario tipoConvidado = tipoUsuarioRepository.findByName("Convidado");
             TipoUsuario tipoVisitante = tipoUsuarioRepository.findByName("Visitante");
-
+            TipoUsuario tipoProfessor = tipoUsuarioRepository.findByName("Professor");
             Usuario admin = new Usuario();
             admin.setNome("John Doe");
             admin.setEmail("john.doe@example.com");
             admin.setSenha("admin123");
             admin.setTipoUsuario(tipoAdmin);
             usuarioRepository.save(admin);
+
+            Usuario professor = new Usuario();
+            professor.setNome("Guilherme");
+            professor.setEmail("Guilherme@example.com");
+            professor.setSenha("professor123");
+            professor.setTipoUsuario(tipoProfessor);
+            usuarioRepository.save(professor);
+
+            Usuario professorGustavo = new Usuario();
+            professorGustavo.setNome("Gustavo");
+            professorGustavo.setEmail("Gustavo@example.com");
+            professorGustavo.setSenha("professor123");
+            professorGustavo.setTipoUsuario(tipoProfessor);
+            usuarioRepository.save(professorGustavo);
 
             Usuario comum = new Usuario();
             comum.setNome("Jane Smith");
@@ -127,6 +168,10 @@ public class SeedData implements CommandLineRunner {
             TipoUsuario tipoVisitante = new TipoUsuario();
             tipoVisitante.setNome("Visitante");
             tipoUsuarioRepository.save(tipoVisitante);
+
+            TipoUsuario tipoProfessor = new TipoUsuario();
+            tipoProfessor.setNome("Professor");
+            tipoUsuarioRepository.save(tipoProfessor);
 
         }
     }

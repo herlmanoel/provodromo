@@ -4,7 +4,9 @@ import com.provodromo.provodromo.model.base.BaseModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,18 +16,12 @@ import java.util.Set;
 public class Prova extends BaseModel {
 
     private String titulo;
-    private String dataInicio;
-    private String dataFim;
 
     @ManyToOne
     @JoinColumn(name = "turma_id")
     private Turma turma;
 
     private int nota;
-
-    @ManyToOne
-    @JoinColumn(name = "criador_id")
-    private Usuario criador;
 
     @ManyToMany
     @JoinTable(
@@ -35,4 +31,14 @@ public class Prova extends BaseModel {
     )
     @EqualsAndHashCode.Exclude
     private Set<Questao> questoes = new HashSet<>();
+
+    public Prova(String titulo, Turma turma, int nota, Set<Questao> questoes) {
+        this.titulo = titulo;
+        this.turma = turma;
+        this.nota = nota;
+        this.questoes = questoes;
+    }
+
+    public Prova() {
+    }
 }
