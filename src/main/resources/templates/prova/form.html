@@ -3,7 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Formulário de Provas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .accordion-header {
+            padding: 1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .accordion-panel {
+            display: none;
+            padding: 1rem;
+        }
+
+        .accordion-item.active .accordion-panel {
+            display: block;
+        }
+    </style>
+
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>function toggleAccordion(element) {
+        element.parentElement.classList.toggle('active');
+    }</script>
 </head>
 <body>
 <div class="border-b">
@@ -81,6 +102,60 @@
                         <label for="nota" class="peer-disabled:cursor-not-allowed text-sm font-medium leading-none peer-disabled:opacity-70">Selecione uma nota de 1 a 10</label>
                         <input class="flex w-full rounded-md file:border-0 border file:bg-transparent px-3 py-2 text-sm file:text-sm file:font-medium border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                id="nota" name="Nota" type="number" min="1" max="10" th:field="*{nota}" required >
+                    </div>
+
+                    <div>
+                        <div class="relative mb-3">
+                            <div class="accordion">
+                                <div class="accordion-item">
+                                    <div
+                                            class="accordion-header relative flex items-center justify-between font-semibold w-full bg-white border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                                            onclick="toggleAccordion(this)"
+                                    >
+                                        Adicionar questão
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        </svg>
+
+                                    </div>
+                                    <div class="accordion-panel">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        <div class="relative mb-3">-->
+<!--                            <div class="accordion">-->
+<!--                                <div class="accordion-item">-->
+<!--                                    <div-->
+<!--                                            class="accordion-header relative flex items-center w-full p-4 font-semibold text-left transition-all ease-in border-b border-solid cursor-pointer border-slate-100 text-slate-700 rounded-t-1 group text-dark-500"-->
+<!--                                            onclick="toggleAccordion(this)"-->
+<!--                                    >-->
+<!--                                        What is Material Tailwind?-->
+<!--                                    </div>-->
+<!--                                    <div class="accordion-panel">-->
+<!--                                        We're not always in the position that we want to be at. We're constantly growing. We're constantly making mistakes. We're constantly trying to express ourselves and actualize our dreams.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="accordion">-->
+<!--                                <div class="accordion-item">-->
+<!--                                    <div-->
+<!--                                            class="accordion-header relative flex items-center w-full p-4 font-semibold text-left transition-all ease-in border-b border-solid cursor-pointer border-slate-100 text-slate-700 rounded-t-1 group text-dark-500"-->
+<!--                                            onclick="toggleAccordion(this)"-->
+<!--                                    >-->
+<!--                                        What is Material Tailwind?-->
+<!--                                    </div>-->
+<!--                                    <div class="accordion-panel">-->
+<!--                                        We're not always in the position that we want to be at. We're constantly growing. We're constantly making mistakes. We're constantly trying to express ourselves and actualize our dreams.-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
                     </div>
 
                     <button

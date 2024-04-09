@@ -57,4 +57,11 @@ public class ProvaController {
         return "redirect:/prova/listar";
     }
 
+    @GetMapping("/visualizar/{id}")
+    public String visualizarProva(@PathVariable Long id, Model model) {
+        Prova prova = provaService.findById(id);
+        model.addAttribute("prova", prova);
+        return "prova/visualizar";
+    }
+
 }
