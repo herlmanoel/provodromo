@@ -32,6 +32,12 @@ public class ProvaService implements BaseService<Prova> {
 
     @Override
     public void deleteById(Long id) {
+        Prova prova = provaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prova não encontrada com o id: " + id));
+        prova.getQuestoes().clear();
+        prova.setTurma(null);
+        provaRepository.save(prova);
+
         provaRepository.deleteById(id);
     }
 }

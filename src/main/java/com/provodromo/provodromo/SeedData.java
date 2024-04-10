@@ -35,24 +35,24 @@ public class SeedData implements CommandLineRunner {
         seedUsuarios();
         seedTurma();
 
-        for (int i = 1; i <= 5; i++) {
-            Questao questao = new Questao();
-            questao.setTexto("Questão " + i);
-            questao.setDificuldade("Difícil");
-            questao.setNota(10.0);
-
-            List<Alternativa> alternativas = Arrays.asList(
-                    criarAlternativa("Alternativa A", true),
-                    criarAlternativa("Alternativa B", false),
-                    criarAlternativa("Alternativa C", false),
-                    criarAlternativa("Alternativa D", false)
-            );
-
-            alternativas.forEach(alt -> alt.setQuestao(questao));
-            questao.setAlternativas(alternativas);
-
-            questaoRepository.save(questao);
-        }
+//        for (int i = 1; i <= 5; i++) {
+//            Questao questao = new Questao();
+//            questao.setTexto("Questão " + i);
+//            questao.setDificuldade("Difícil");
+//            questao.setNota(10.0);
+//
+//            List<Alternativa> alternativas = Arrays.asList(
+//                    criarAlternativa("Alternativa A", true),
+//                    criarAlternativa("Alternativa B", false),
+//                    criarAlternativa("Alternativa C", false),
+//                    criarAlternativa("Alternativa D", false)
+//            );
+//
+//            alternativas.forEach(alt -> alt.setQuestao(questao));
+//            questao.setAlternativas(alternativas);
+//
+//            questaoRepository.save(questao);
+//        }
 
         seedProva();
     }

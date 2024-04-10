@@ -6,6 +6,7 @@ import com.provodromo.provodromo.model.Usuario;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.provodromo.provodromo.repository.TurmaRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
 import com.provodromo.provodromo.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class UsuarioService implements BaseService<Usuario> {
     @Autowired
     private UsuarioRepository repository;
+    @Autowired
+    private TurmaRepository turmaRepository;
 
     @Override
     public Usuario findById(Long id) {
@@ -34,6 +37,15 @@ public class UsuarioService implements BaseService<Usuario> {
 
     @Override
     public void deleteById(Long id) {
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o id: " + id));
+
+        turmaRepository.deleteByProfessor(usuario.getId());
+
+        usuario.setTipoUsuario(null);
+
+        turmaRepository.flush();
+        repository.save(usuario);
         repository.deleteById(id);
     }
 

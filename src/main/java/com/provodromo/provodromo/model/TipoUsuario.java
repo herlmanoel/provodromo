@@ -11,7 +11,4 @@ import java.util.List;
 @Data
 public class TipoUsuario extends BaseModel {
     private String nome;
-
-//    @OneToMany(mappedBy = "tipoUsuario", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-//    private List<Usuario> usuarios;
 }
