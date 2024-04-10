@@ -52,7 +52,7 @@
                 <a th:href="@{/prova/visualizar/{id}(id=${prova.id})}" class="p-4 flex flex-col">
                     <div class="grid gap-1.5">
                         <h3 class="text-lg font-bold tracking-tight" th:text="${prova.titulo}"></h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${prova.turma.professor.nome}+' - '+ ${prova.turma.nome}">
+                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${prova.turma != null && prova.turma.professor != null? prova.turma.professor.nome : 'Não possui Professor'}+' - '+ ${prova.turma != null ? prova.turma.nome : 'Não possui Turma'}">
                             Professor
                         </p>
                         <p class="text-sm text-gray-500 dark:text-gray-400" th:text="'Nota máxima: ' + ${prova.nota}">

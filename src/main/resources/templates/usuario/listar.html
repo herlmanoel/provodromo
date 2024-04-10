@@ -53,7 +53,7 @@
                         <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${usuario.email}">
                             eve@example.
                         </p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${usuario.tipoUsuario.nome}">
+                        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${usuario.tipoUsuario != null ? usuario.tipoUsuario.nome : 'Não possui'}">
                             eve@example.
                         </p>
                     </div>

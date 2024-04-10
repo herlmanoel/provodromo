@@ -23,7 +23,7 @@ public class Prova extends BaseModel {
 
     private int nota;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "tb_prova_questao",
             joinColumns = @JoinColumn(name = "prova_id"),
