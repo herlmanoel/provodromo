@@ -49,7 +49,7 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioDTO, Long> 
 
     @Override
     public TipoUsuarioDTO create(TipoUsuarioDTO dto) {
-        if (repository.findByName(dto.getNome()) != null) {
+        if (repository.findByNome(dto.getNome()) != null) {
             throw new RegraNegocioException("Já existe um tipo de usuário com o nome: " + dto.getNome());
         }
         TipoUsuario tipoUsuario = dtoToEntity(dto);
@@ -63,7 +63,7 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioDTO, Long> 
 
         if (!tipoUsuario.getNome().equals("Comum")) {
             List<Usuario> usuarios = usuarioRepository.findByTipoUsuarioId(id);
-            TipoUsuario tipoComum = repository.findByName("Comum");
+            TipoUsuario tipoComum = repository.findByNome("Comum");
 
             for (Usuario usuario : usuarios) {
                 usuario.setTipoUsuario(tipoComum);
@@ -76,7 +76,7 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioDTO, Long> 
 
     @Override
     public TipoUsuarioDTO findByName(String name) {
-        TipoUsuario tipoUsuario = repository.findByName(name);
+        TipoUsuario tipoUsuario = repository.findByNome(name);
         if (tipoUsuario == null) {
             throw new RegraNegocioException("Tipo de usuário não encontrado com o nome: " + name);
         }

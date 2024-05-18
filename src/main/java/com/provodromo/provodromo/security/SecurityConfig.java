@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +31,7 @@ public class SecurityConfig {
     private static final String REGISTER_URL = "/api/auth/register";
     private static final String USER_ID_URL = "/api/usuario/{id}";
     private static final String USER_URL = "/api/usuario";
-    private static final String TIPO_USUARIO_URL = "/api/tipoUsuarios";
+    private static final String TIPO_USUARIO_URL = "/api/tipoUsuario";
 
     private static final String ROLE_COMUM = "COMUM";
     private static final String ROLE_CONVIDADO = "CONVIDADO";

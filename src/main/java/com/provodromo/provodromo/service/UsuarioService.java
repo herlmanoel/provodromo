@@ -62,7 +62,7 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
 
     public UsuarioDTO update(Long id, UsuarioDTO dto) {
         if (dto == null || dto.getEmail() == null || dto.getSenha() == null) {
-            throw new IllegalArgumentException("Dados de usuário inválidos");
+            throw new RegraNegocioException("Dados de usuário inválidos");
         }
 
         if (!usuarioRepository.existsById(id)) {
@@ -74,7 +74,7 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
     }
 
     @Transactional
-    public void associarTipoUsuario(Long usuarioId, Long tipoUsuarioId) {
+    public UsuarioDTO associarTipoUsuario(Long usuarioId, Long tipoUsuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado com o ID: " + usuarioId));
 
@@ -82,6 +82,9 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
                 .orElseThrow(() -> new RegraNegocioException("Tipo de usuário não encontrado com o ID: " + tipoUsuarioId));
 
         usuario.setTipoUsuario(tipoUsuario);
+
+        var usuarioSaved = usuarioRepository.save(usuario);
+        return entityToDTO(usuarioSaved);
     }
 
     public UsuarioDTO buscarPorEmail(String email) {
@@ -97,23 +100,69 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
     }
 
     private UsuarioDTO entityToDTO(Usuario usuario) {
-        return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), null, new TipoUsuarioDTO());
+        if (usuario == null) {
+            return null;
+        }
+
+        TipoUsuarioDTO tipoUsuarioDTO = convertToTipoUsuarioDTO(usuario.getTipoUsuario());
+        return new UsuarioDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                null,
+                tipoUsuarioDTO
+        );
     }
 
     private Usuario dtoToEntity(UsuarioDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
         Usuario usuario = new Usuario();
         usuario.setId(dto.getId());
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
+        usuario.setTipoUsuario(convertToTipoUsuario(dto.getTipoUsuario()));
+
         return usuario;
     }
+
+    private TipoUsuarioDTO convertToTipoUsuarioDTO(TipoUsuario tipoUsuario) {
+        if (tipoUsuario == null) {
+            return null;
+        }
+        return new TipoUsuarioDTO(tipoUsuario.getNome());
+    }
+
+    private TipoUsuario convertToTipoUsuario(TipoUsuarioDTO tipoUsuarioDTO) {
+        if (tipoUsuarioDTO == null) {
+            return null;
+        }
+        TipoUsuario tipoUsuario = new TipoUsuario();
+        tipoUsuario.setNome(tipoUsuarioDTO.getNome());
+        return tipoUsuario;
+    }
+
 
     private UsuarioDTO createOrUpdate(UsuarioDTO dto) {
         try {
             Usuario usuario = dtoToEntity(dto);
-            String senhaCodificada = passwordEncoder.encode(dto.getSenha());
-            usuario.setSenha(senhaCodificada);
+
+            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+                String senhaCodificada = passwordEncoder.encode(dto.getSenha());
+                usuario.setSenha(senhaCodificada);
+            }
+
+            if (dto.getTipoUsuario() != null && !dto.getTipoUsuario().getNome().isEmpty()) {
+                TipoUsuario tipoUsuario = tipoUsuarioRepository.findByNome(dto.getTipoUsuario().getNome());
+                if (tipoUsuario == null) {
+                    throw new RegraNegocioException("Tipo de usuário não encontrado: " + dto.getTipoUsuario().getNome());
+                }
+                usuario.setTipoUsuario(tipoUsuario);
+            }
+
             usuario = usuarioRepository.save(usuario);
             return entityToDTO(usuario);
         } catch (Exception e) {

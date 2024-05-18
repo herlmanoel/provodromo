@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/tipoUsuarios", produces = {"application/json"})
+@RequestMapping(value = "/api/tipoUsuario", produces = {"application/json"})
 @AllArgsConstructor
 public class TipoUsuarioController implements BaseController<TipoUsuarioDTO> {
 

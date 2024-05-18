@@ -7,7 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,12 +92,12 @@ public class SeedData implements CommandLineRunner {
 
     private void seedUsuarios() {
         if (usuarioRepository.findAll().isEmpty()) {
-            TipoUsuario tipoAdmin = tipoUsuarioRepository.findByName("Administrador");
-            TipoUsuario tipoComum = tipoUsuarioRepository.findByName("Comum");
-            TipoUsuario tipoModerador = tipoUsuarioRepository.findByName("Moderador");
-            TipoUsuario tipoConvidado = tipoUsuarioRepository.findByName("Convidado");
-            TipoUsuario tipoVisitante = tipoUsuarioRepository.findByName("Visitante");
-            TipoUsuario tipoProfessor = tipoUsuarioRepository.findByName("Professor");
+            TipoUsuario tipoAdmin = tipoUsuarioRepository.findByNome("Administrador");
+            TipoUsuario tipoComum = tipoUsuarioRepository.findByNome("Comum");
+            TipoUsuario tipoModerador = tipoUsuarioRepository.findByNome("Moderador");
+            TipoUsuario tipoConvidado = tipoUsuarioRepository.findByNome("Convidado");
+            TipoUsuario tipoVisitante = tipoUsuarioRepository.findByNome("Visitante");
+            TipoUsuario tipoProfessor = tipoUsuarioRepository.findByNome("Professor");
             Usuario admin = new Usuario();
             admin.setNome("John Doe");
             admin.setEmail("john.doe@example.com");
