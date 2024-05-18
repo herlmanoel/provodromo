@@ -1,58 +1,54 @@
  package com.provodromo.provodromo.controller;
 
-import com.provodromo.provodromo.model.TipoUsuario;
-import com.provodromo.provodromo.model.Usuario;
-import com.provodromo.provodromo.service.TipoUsuarioService;
+import com.provodromo.provodromo.controller.base.BaseController;
+import com.provodromo.provodromo.dto.UsuarioDTO;
 import com.provodromo.provodromo.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/usuario")
-public class UsuarioController {
+import java.util.List;
 
-    @Autowired
-    private UsuarioService usuarioService;
+ @RequestMapping("/usuario")
+ @AllArgsConstructor
+ @RestController
+ public class UsuarioController implements BaseController<UsuarioDTO> {
 
-    @Autowired
-    private TipoUsuarioService tipoUsuarioService;
+     private final UsuarioService usuarioService;
 
-    @GetMapping("/listar")
-    public String listar(Model model) {
-        model.addAttribute("usuarios", usuarioService.findAll());
-        return "usuario/listar";
-    }
+     @GetMapping
+     @Override
+     public List<UsuarioDTO> listar() {
+         return usuarioService.findAll().stream().toList();
+     }
 
-    @GetMapping("/novo")
-    public String novo(@RequestParam(required = false) Long id, Model model) {
-        Usuario usuario = id != null ? usuarioService.findById(id) : new Usuario();
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("tiposUsuarios", tipoUsuarioService.findAll());
-        return "usuario/form";
-    }
+     @PostMapping
+     @Override
+     public UsuarioDTO criar(@Valid @RequestBody UsuarioDTO usuario) {
+         return usuarioService.save(usuario);
+     }
 
-    @PostMapping("/salvar")
-    public String salvar(@ModelAttribute Usuario usuario) {
-        TipoUsuario tipoUsuario = tipoUsuarioService.findById(usuario.getTipoUsuario().getId());
-        usuario.setTipoUsuario(tipoUsuario);
-        usuarioService.save(usuario);
-        return "redirect:/usuario/listar";
-    }
+     @GetMapping("/{id}")
+     @Override
+     public UsuarioDTO buscar(@PathVariable Long id) {
+         return usuarioService.findById(id);
+     }
 
-    @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model) {
-        Usuario usuario = usuarioService.findById(id);
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("tiposUsuarios", tipoUsuarioService.findAll());
-        return "usuario/form";
-    }
+     @PutMapping("/{id}")
+     @Override
+     public UsuarioDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioDTO usuario) {
+         return usuarioService.update(id, usuario);
+     }
 
-    @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        usuarioService.deleteById(id);
-        return "redirect:/usuario/listar";
-    }
-}
+     @DeleteMapping("/{id}")
+     @Override
+     public void excluir(@PathVariable Long id) {
+         usuarioService.deleteById(id);
+     }
+
+     @PostMapping("/{usuarioId}/tipo/{tipoUsuarioId}")
+     public void associarTipoUsuario(@PathVariable Long usuarioId, @PathVariable Long tipoUsuarioId) {
+         usuarioService.associarTipoUsuario(usuarioId, tipoUsuarioId);
+     }
+ }
 

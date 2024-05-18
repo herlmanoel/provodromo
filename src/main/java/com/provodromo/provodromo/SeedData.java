@@ -4,6 +4,7 @@ import com.provodromo.provodromo.model.*;
 import com.provodromo.provodromo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -28,6 +29,9 @@ public class SeedData implements CommandLineRunner {
 
     @Autowired
     private  ProvaRepository provaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -98,49 +102,49 @@ public class SeedData implements CommandLineRunner {
             Usuario admin = new Usuario();
             admin.setNome("John Doe");
             admin.setEmail("john.doe@example.com");
-            admin.setSenha("admin123");
+            admin.setSenha(passwordEncoder.encode("admin123"));
             admin.setTipoUsuario(tipoAdmin);
             usuarioRepository.save(admin);
 
             Usuario professor = new Usuario();
             professor.setNome("Guilherme");
             professor.setEmail("Guilherme@example.com");
-            professor.setSenha("professor123");
+            professor.setSenha(passwordEncoder.encode("professor123"));
             professor.setTipoUsuario(tipoProfessor);
             usuarioRepository.save(professor);
 
             Usuario professorGustavo = new Usuario();
             professorGustavo.setNome("Gustavo");
             professorGustavo.setEmail("Gustavo@example.com");
-            professorGustavo.setSenha("professor123");
+            professorGustavo.setSenha(passwordEncoder.encode("professor123"));
             professorGustavo.setTipoUsuario(tipoProfessor);
             usuarioRepository.save(professorGustavo);
 
             Usuario comum = new Usuario();
             comum.setNome("Jane Smith");
             comum.setEmail("jane.smith@example.com");
-            comum.setSenha("comum123");
+            comum.setSenha(passwordEncoder.encode("comum123"));
             comum.setTipoUsuario(tipoComum);
             usuarioRepository.save(comum);
 
             Usuario moderador = new Usuario();
             moderador.setNome("Alice Johnson");
             moderador.setEmail("alice.johnson@example.com");
-            moderador.setSenha("moderador123");
+            moderador.setSenha(passwordEncoder.encode("moderador123"));
             moderador.setTipoUsuario(tipoModerador);
             usuarioRepository.save(moderador);
 
             Usuario convidado = new Usuario();
             convidado.setNome("Bob Brown");
             convidado.setEmail("bob.brown@example.com");
-            convidado.setSenha("convidado123");
+            convidado.setSenha(passwordEncoder.encode("convidado123"));
             convidado.setTipoUsuario(tipoConvidado);
             usuarioRepository.save(convidado);
 
             Usuario visitante = new Usuario();
             visitante.setNome("Eva Wilson");
             visitante.setEmail("eva.wilson@example.com");
-            visitante.setSenha("visitante123");
+            visitante.setSenha(passwordEncoder.encode("visitante123"));
             visitante.setTipoUsuario(tipoVisitante);
             usuarioRepository.save(visitante);
 
