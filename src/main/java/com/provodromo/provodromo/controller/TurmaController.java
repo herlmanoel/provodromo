@@ -37,14 +37,14 @@ public class TurmaController implements BaseController<TurmaDTO> {
         return turmaService.findById(id);
     }
 
-    @GetMapping("/editar/{id}")
+    @PutMapping("/editar/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Override
     public TurmaDTO atualizar(@PathVariable Long id, @Valid @RequestBody TurmaDTO turmaDTO) {
         return turmaService.update(id, turmaDTO);
     }
 
-    @GetMapping("/excluir/{id}")
+    @DeleteMapping("/excluir/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Override
     public void excluir(@PathVariable Long id) {
