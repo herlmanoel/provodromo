@@ -74,7 +74,6 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioDTO, Long> 
         }
     }
 
-    @Override
     public TipoUsuarioDTO findByName(String name) {
         TipoUsuario tipoUsuario = repository.findByNome(name);
         if (tipoUsuario == null) {

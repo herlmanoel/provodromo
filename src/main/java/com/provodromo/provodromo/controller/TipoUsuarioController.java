@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/tipoUsuario", produces = {"application/json"})
@@ -18,8 +19,8 @@ public class TipoUsuarioController implements BaseController<TipoUsuarioDTO> {
 
 
     @GetMapping
-    public List<TipoUsuarioDTO> listar() {
-        return tipoUsuarioService.findAll().stream().toList();
+    public Set<TipoUsuarioDTO> listar() {
+        return tipoUsuarioService.findAll();
     }
 
     @PostMapping

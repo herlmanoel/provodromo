@@ -3,11 +3,12 @@ package com.provodromo.provodromo.controller.base;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BaseController<T> {
 
     @GetMapping
-    List<T> listar();
+    Set<T> listar();
 
     @PostMapping
     T criar(@RequestBody T objeto);

@@ -10,6 +10,7 @@
 
  import java.util.ArrayList;
  import java.util.List;
+ import java.util.Set;
 
  @RestController
  @RequestMapping(value = "/api/usuario", produces = {"application/json"})
@@ -20,8 +21,8 @@
 
      @GetMapping
      @Override
-     public List<UsuarioDTO> listar() {
-         return new ArrayList<>(usuarioService.findAll());
+     public Set<UsuarioDTO> listar() {
+         return usuarioService.findAll();
      }
 
      @PostMapping

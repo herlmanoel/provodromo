@@ -1,73 +1,55 @@
 package com.provodromo.provodromo.controller;
 
+import com.provodromo.provodromo.controller.base.BaseController;
+import com.provodromo.provodromo.dto.QuestaoDTO;
 import com.provodromo.provodromo.model.Alternativa;
 import com.provodromo.provodromo.model.Questao;
 import com.provodromo.provodromo.service.QuestaoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/questao", produces = {"application/json"})
-public class QuestaoController {
+public class QuestaoController implements BaseController<QuestaoDTO> {
 
     @Autowired
     private QuestaoService questaoService;
 
     @GetMapping("/listar")
-    public String listarQuestao(Model model) {
-        model.addAttribute("questoes", questaoService.findAll());
-        return "questao/listar";
-    }
-
-    @GetMapping("/novo")
-    public String novaQuestaoForm(Model model) {
-        Questao questao = new Questao();
-        Alternativa alternativa1 = new Alternativa();
-        Alternativa alternativa2 = new Alternativa();
-        Alternativa alternativa3 = new Alternativa();
-        Alternativa alternativa4 = new Alternativa();
-        alternativa1.setQuestao(questao);
-        alternativa2.setQuestao(questao);
-        alternativa3.setQuestao(questao);
-        alternativa4.setQuestao(questao);
-        List<Alternativa> alternativas = List.of(alternativa1, alternativa2, alternativa3, alternativa4);
-        questao.setAlternativas(alternativas);
-        model.addAttribute("questao", questao);
-        return "questao/form";
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public Set<QuestaoDTO> listar() {
+        return questaoService.findAll();
     }
 
     @PostMapping("/salvar")
-    public String salvarQuestao(@ModelAttribute Questao questao) {
-        if (questao.getId() != null) {
-            questaoService.update(questao);
-        } else {
-            questaoService.save(questao);
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public QuestaoDTO criar(@Valid @RequestBody QuestaoDTO questaoDTO) {
 
-        return "redirect:/questao/listar";
+        return questaoService.create(questaoDTO);
     }
 
-    @GetMapping("/editar/{id}")
-    public String editarQuestaoForm(@PathVariable Long id, Model model) {
-        Questao questao = questaoService.findById(id);
-        model.addAttribute("questao", questao);
-        return "questao/form";
+    @Override
+    public QuestaoDTO buscar(Long id) {
+        return questaoService.findById(id);
     }
 
-    @PostMapping("/atualizar/{id}")
-    public String atualizarQuestao(@PathVariable Long id, @ModelAttribute Questao questao) {
-        questao.setId(id); // Certifique-se de que o ID está definido corretamente
-        questaoService.save(questao);
-        return "redirect:/questao/listar"; // Redirecionar para a página de listagem após a atualização
+    @PutMapping("/atualizar/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public QuestaoDTO atualizar(@PathVariable Long id, @Valid @RequestBody QuestaoDTO questaoDTO) {
+
+        return questaoService.update(id, questaoDTO);
     }
 
     @GetMapping("/excluir/{id}")
-    public String excluirQuestao(@PathVariable Long id) {
+    public void excluir(@PathVariable Long id) {
         questaoService.deleteById(id);
-        return "redirect:/questao/listar"; // Redirecionar para a página de listagem após a exclusão
     }
 }

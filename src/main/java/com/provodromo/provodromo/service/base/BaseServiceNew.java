@@ -9,5 +9,4 @@ public interface BaseServiceNew<DTO, ID> {
     DTO update(ID id, DTO dto);
     DTO create(DTO dto);
     void deleteById(ID id);
-    DTO findByName(String name);
 }
