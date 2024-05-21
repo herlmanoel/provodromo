@@ -1,71 +1,53 @@
 package com.provodromo.provodromo.controller;
 
-import com.provodromo.provodromo.model.TipoUsuario;
-import com.provodromo.provodromo.model.Turma;
-import com.provodromo.provodromo.model.Usuario;
-import com.provodromo.provodromo.service.TipoUsuarioService;
+import com.provodromo.provodromo.controller.base.BaseController;
+import com.provodromo.provodromo.dto.TurmaDTO;
 import com.provodromo.provodromo.service.TurmaService;
-import com.provodromo.provodromo.service.UsuarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/turma", produces = {"application/json"})
-public class TurmaController {
-//    @Autowired
-//    private TurmaService turmaService;
-//
-//    @Autowired
-//    private UsuarioService usuarioService;
-//
-//    @Autowired
-//    private TipoUsuarioService tipoUsuarioService;
-//
-//    @GetMapping("/listar")
-//    public String listar(Model model) {
-//        model.addAttribute("turmas" , turmaService.findAll());
-//
-//        return "turma/listar";
-//    }
-//
-//    @GetMapping("/form")
-//    public String novaTurmaFormulario(Model model) {
-//        model.addAttribute("turma", new Turma());
-//        model.addAttribute("professores",
-//                usuarioService.findByTipoUsuario(
-//                        tipoUsuarioService.findByName("Professor").getId()));
-//        return "turma/form";
-//    }
-//
-//    @PostMapping("salvar")
-//    public String salvarTurma(@ModelAttribute Turma turma) {
-//        turmaService.save(turma);
-//        return "turma/listar";
-//    }
-//
-//    @GetMapping("/editar/{id}")
-//    public String editarTurmaFormulario(@PathVariable Long id, Model model) {
-//        Turma turma = turmaService.findById(id);
-//        model.addAttribute("turma", turma);
-//        model.addAttribute("professores",
-//                usuarioService.findByTipoUsuario(
-//                        tipoUsuarioService.findByName("Professor").getId()));
-//        return "turma/form";
-//    }
-//
-//    @PostMapping("/editar/{id}")
-//    public String editarTurma(@PathVariable Long id, Turma turma) {
-//        turma.setId(id);
-//        turmaService.save(turma);
-//        return "/turma/listar";
-//    }
-//
-//    @GetMapping("/excluir/{id}")
-//    public String excluirturma(@PathVariable Long id, Model model) {
-//        turmaService.deleteById(id);
-//        return "/turma/listar";
-//    }
+public class TurmaController implements BaseController<TurmaDTO> {
+    @Autowired
+    private TurmaService turmaService;
 
+    @GetMapping("/listar")
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public Set<TurmaDTO> listar() {
+        return turmaService.findAll();
+    }
+
+    @PostMapping("/salvar")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Override
+    public TurmaDTO criar(@Valid @RequestBody TurmaDTO turmaDTO) {
+        return turmaService.create(turmaDTO);
+    }
+
+    @GetMapping("/buscar/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public TurmaDTO buscar(@PathVariable Long id) {
+        return turmaService.findById(id);
+    }
+
+    @GetMapping("/editar/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @Override
+    public TurmaDTO atualizar(@PathVariable Long id, @Valid @RequestBody TurmaDTO turmaDTO) {
+        return turmaService.update(id, turmaDTO);
+    }
+
+    @GetMapping("/excluir/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Override
+    public void excluir(@PathVariable Long id) {
+        turmaService.deleteById(id);
+    }
 }

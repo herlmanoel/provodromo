@@ -2,16 +2,11 @@ package com.provodromo.provodromo.service;
 
 import com.provodromo.provodromo.dto.AlternativaDTO;
 import com.provodromo.provodromo.dto.QuestaoDTO;
-import com.provodromo.provodromo.dto.TipoUsuarioDTO;
-import com.provodromo.provodromo.dto.UsuarioDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.Alternativa;
 import com.provodromo.provodromo.model.Questao;
-import com.provodromo.provodromo.model.TipoUsuario;
-import com.provodromo.provodromo.model.Usuario;
 import com.provodromo.provodromo.repository.AlternativaRepository;
 import com.provodromo.provodromo.repository.QuestaoRepository;
-import com.provodromo.provodromo.service.base.BaseService;
 import com.provodromo.provodromo.service.base.BaseServiceNew;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
