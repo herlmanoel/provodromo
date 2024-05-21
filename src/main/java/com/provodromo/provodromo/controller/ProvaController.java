@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/prova")
+@RestController
+@RequestMapping(value = "/api/prova", produces = {"application/json"})
 public class ProvaController {
 
     @Autowired

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-@RequestMapping("/turma")
+@RestController
+@RequestMapping(value = "/api/turma", produces = {"application/json"})
 public class TurmaController {
 //    @Autowired
 //    private TurmaService turmaService;

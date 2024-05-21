@@ -11,9 +11,9 @@
  import java.util.ArrayList;
  import java.util.List;
 
- @RequestMapping("/api/usuario")
- @AllArgsConstructor
  @RestController
+ @RequestMapping(value = "/api/usuario", produces = {"application/json"})
+ @AllArgsConstructor
  public class UsuarioController implements BaseController<UsuarioDTO> {
 
      private final UsuarioService usuarioService;
