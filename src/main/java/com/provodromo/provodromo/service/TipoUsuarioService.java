@@ -3,14 +3,17 @@ package com.provodromo.provodromo.service;
 import com.provodromo.provodromo.dto.request.TipoUsuarioRequestDTO;
 import com.provodromo.provodromo.dto.response.TipoUsuarioResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
+import com.provodromo.provodromo.model.HistoricoTipoUsuario;
 import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
+import com.provodromo.provodromo.repository.HistoricoTipoUsuarioRepository;
 import com.provodromo.provodromo.repository.TipoUsuarioRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
 import com.provodromo.provodromo.service.base.BaseServiceNew;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +26,7 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioRequestDTO,
 
     private final TipoUsuarioRepository repository;
     private final UsuarioRepository usuarioRepository;
+    private final HistoricoTipoUsuarioRepository historicoRepository;
 
     @Override
     public TipoUsuarioResponseDTO findById(Long id) {
@@ -44,6 +48,12 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioRequestDTO,
         if (!repository.existsById(id)) {
             throw new RegraNegocioException("Tipo de usuário não encontrado com o id: " + id);
         }
+
+        TipoUsuario tipoUsuarioAntigo = repository.findById(id)
+                .orElseThrow(() -> new RegraNegocioException("Tipo de usuário não encontrado com o id: " + id));
+
+        salvarHistorico(tipoUsuarioAntigo);
+
         tipoUsuario.setId(id);
         return convertToTipoUsuarioResponseDTO(repository.save(tipoUsuario));
     }
@@ -53,14 +63,20 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioRequestDTO,
         if (repository.findByNome(dto.getNome()) != null) {
             throw new RegraNegocioException("Já existe um tipo de usuário com o nome: " + dto.getNome());
         }
+
         TipoUsuario tipoUsuario = convertToTipoUsuario(dto);
-        return convertToTipoUsuarioResponseDTO(repository.save(tipoUsuario));
+        TipoUsuario tipoUsuarioCreated = repository.save(tipoUsuario);
+        salvarHistorico(tipoUsuarioCreated);
+
+        return convertToTipoUsuarioResponseDTO(tipoUsuarioCreated);
     }
 
     @Override
     public void deleteById(Long id) {
         TipoUsuario tipoUsuario = repository.findById(id)
                 .orElseThrow(() -> new RegraNegocioException("Tipo de usuário não encontrado com o id: " + id));
+
+        salvarHistorico(tipoUsuario);
 
         if (!tipoUsuario.getNome().equals("Comum")) {
             List<Usuario> usuarios = usuarioRepository.findByTipoUsuarioId(id);
@@ -93,6 +109,13 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioRequestDTO,
         TipoUsuarioResponseDTO dto = new TipoUsuarioResponseDTO();
         dto.setNome(entity.getNome());
         return dto;
+    }
+    private void salvarHistorico(TipoUsuario tipoUsuarioAntigo) {
+        HistoricoTipoUsuario historico = new HistoricoTipoUsuario();
+        historico.setNome(tipoUsuarioAntigo.getNome());
+        historico.setDataAlteracao(LocalDateTime.now());
+        historico.setTipoUsuarioId(tipoUsuarioAntigo.getId());
+        historicoRepository.save(historico);
     }
 }
 
