@@ -1,7 +1,9 @@
 package com.provodromo.provodromo.service;
 
-import com.provodromo.provodromo.dto.TipoUsuarioDTO;
-import com.provodromo.provodromo.dto.UsuarioDTO;
+import com.provodromo.provodromo.dto.request.TipoUsuarioRequestDTO;
+import com.provodromo.provodromo.dto.request.UsuarioRequestDTO;
+import com.provodromo.provodromo.dto.response.TipoUsuarioResponseDTO;
+import com.provodromo.provodromo.dto.response.UsuarioResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
@@ -11,7 +13,7 @@ import java.util.stream.Collectors;
 
 import com.provodromo.provodromo.repository.TipoUsuarioRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
-import com.provodromo.provodromo.service.base.BaseService;
+import com.provodromo.provodromo.service.base.BaseServiceNew;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,28 +21,28 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UsuarioService implements BaseService<UsuarioDTO> {
+public class UsuarioService implements BaseServiceNew<UsuarioRequestDTO, UsuarioResponseDTO, Long> {
     private final UsuarioRepository usuarioRepository;
     private final TipoUsuarioRepository tipoUsuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UsuarioDTO findById(Long id) {
+    public UsuarioResponseDTO findById(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado com o ID: " + id));
-        return entityToDTO(usuario);
+        return convertToUsuarioResponseDTO(usuario);
     }
 
     @Override
-    public Set<UsuarioDTO> findAll() {
+    public Set<UsuarioResponseDTO> findAll() {
         return usuarioRepository.findAll()
                 .stream()
-                .map(this::entityToDTO)
+                .map(this::convertToUsuarioResponseDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public UsuarioDTO save(UsuarioDTO dto) {
+    public UsuarioResponseDTO create(UsuarioRequestDTO dto) {
         if (dto == null || dto.getEmail() == null || dto.getSenha() == null) {
             throw new IllegalArgumentException("Dados de usuário inválidos");
         }
@@ -60,7 +62,8 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
         usuarioRepository.deleteById(id);
     }
 
-    public UsuarioDTO update(Long id, UsuarioDTO dto) {
+    @Override
+    public UsuarioResponseDTO update(Long id, UsuarioRequestDTO dto) {
         if (dto == null || dto.getEmail() == null || dto.getSenha() == null) {
             throw new RegraNegocioException("Dados de usuário inválidos");
         }
@@ -74,7 +77,7 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
     }
 
     @Transactional
-    public UsuarioDTO associarTipoUsuario(Long usuarioId, Long tipoUsuarioId) {
+    public UsuarioResponseDTO associarTipoUsuario(Long usuarioId, Long tipoUsuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RegraNegocioException("Usuário não encontrado com o ID: " + usuarioId));
 
@@ -84,10 +87,10 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
         usuario.setTipoUsuario(tipoUsuario);
 
         var usuarioSaved = usuarioRepository.save(usuario);
-        return entityToDTO(usuarioSaved);
+        return convertToUsuarioResponseDTO(usuarioSaved);
     }
 
-    public UsuarioDTO buscarPorEmail(String email) {
+    public UsuarioResponseDTO buscarPorEmail(String email) {
         if (email == null) {
             throw new IllegalArgumentException("E-mail não pode ser nulo");
         }
@@ -96,25 +99,23 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
         if (usuario == null) {
             throw new RegraNegocioException("Usuário não encontrado com o e-mail: " + email);
         }
-        return entityToDTO(usuario);
+        return convertToUsuarioResponseDTO(usuario);
     }
 
-    private UsuarioDTO entityToDTO(Usuario usuario) {
+    private UsuarioResponseDTO convertToUsuarioResponseDTO(Usuario usuario) {
         if (usuario == null) {
             return null;
         }
 
-        TipoUsuarioDTO tipoUsuarioDTO = convertToTipoUsuarioDTO(usuario.getTipoUsuario());
-        return new UsuarioDTO(
+        return new UsuarioResponseDTO(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                null,
-                tipoUsuarioDTO
+                usuario.getTipoUsuario().getNome()
         );
     }
 
-    private Usuario dtoToEntity(UsuarioDTO dto) {
+    private Usuario convertToUsuario(UsuarioRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -129,26 +130,19 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
         return usuario;
     }
 
-    private TipoUsuarioDTO convertToTipoUsuarioDTO(TipoUsuario tipoUsuario) {
-        if (tipoUsuario == null) {
-            return null;
-        }
-        return new TipoUsuarioDTO(tipoUsuario.getNome());
-    }
-
-    private TipoUsuario convertToTipoUsuario(TipoUsuarioDTO tipoUsuarioDTO) {
-        if (tipoUsuarioDTO == null) {
+    private TipoUsuario convertToTipoUsuario(TipoUsuarioRequestDTO tipoUsuarioRequestDTO) {
+        if (tipoUsuarioRequestDTO == null) {
             return null;
         }
         TipoUsuario tipoUsuario = new TipoUsuario();
-        tipoUsuario.setNome(tipoUsuarioDTO.getNome());
+        tipoUsuario.setNome(tipoUsuarioRequestDTO.getNome());
         return tipoUsuario;
     }
 
 
-    private UsuarioDTO createOrUpdate(UsuarioDTO dto) {
+    private UsuarioResponseDTO createOrUpdate(UsuarioRequestDTO dto) {
         try {
-            Usuario usuario = dtoToEntity(dto);
+            Usuario usuario = convertToUsuario(dto);
 
             if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
                 String senhaCodificada = passwordEncoder.encode(dto.getSenha());
@@ -164,7 +158,7 @@ public class UsuarioService implements BaseService<UsuarioDTO> {
             }
 
             usuario = usuarioRepository.save(usuario);
-            return entityToDTO(usuario);
+            return convertToUsuarioResponseDTO(usuario);
         } catch (Exception e) {
             throw new RegraNegocioException("Erro ao salvar/atualizar o usuário: " + e.getMessage());
         }

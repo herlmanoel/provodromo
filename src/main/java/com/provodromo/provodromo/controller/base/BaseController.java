@@ -5,19 +5,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
 
-public interface BaseController<T> {
+public interface BaseController<RequestDTO, ResponseDTO> {
 
     @GetMapping
-    Set<T> listar();
+    Set<ResponseDTO> listar();
 
     @PostMapping
-    T criar(@RequestBody T objeto);
+    ResponseDTO criar(@RequestBody RequestDTO objeto);
 
     @GetMapping("/{id}")
-    T buscar(@PathVariable Long id);
+    ResponseDTO buscar(@PathVariable Long id);
 
     @PutMapping("/{id}")
-    T atualizar(@PathVariable Long id, @RequestBody T objeto);
+    ResponseDTO atualizar(@PathVariable Long id, @RequestBody RequestDTO objeto);
 
     @DeleteMapping("/{id}")
     void excluir(@PathVariable Long id);

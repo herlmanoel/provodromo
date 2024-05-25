@@ -1,6 +1,7 @@
 package com.provodromo.provodromo.service;
 
-import com.provodromo.provodromo.dto.ProvaDTO;
+import com.provodromo.provodromo.dto.request.ProvaRequestDTO;
+import com.provodromo.provodromo.dto.response.ProvaResponseDTO;
 import com.provodromo.provodromo.model.Prova;
 import com.provodromo.provodromo.model.Questao;
 import com.provodromo.provodromo.repository.ProvaRepository;
@@ -14,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class ProvaService implements BaseServiceNew<ProvaDTO, Long> {
+public class ProvaService implements BaseServiceNew<ProvaRequestDTO, ProvaResponseDTO, Long> {
 
     @Autowired
     private ProvaRepository provaRepository;
@@ -24,23 +25,23 @@ public class ProvaService implements BaseServiceNew<ProvaDTO, Long> {
     private QuestaoRepository questaoRepository;
 
     @Override
-    public ProvaDTO findById(Long id) {
+    public ProvaResponseDTO findById(Long id) {
         Prova prova = provaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prova não encontrada com o id: " + id));
 
-        return entityToDTO(prova);
+        return convertToProvaResponseDTO(prova);
     }
 
     @Override
-    public Set<ProvaDTO> findAll() {
+    public Set<ProvaResponseDTO> findAll() {
         return provaRepository.findAll().stream()
-                .map(this::entityToDTO)
+                .map(this::convertToProvaResponseDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public ProvaDTO update(Long aLong, ProvaDTO provaDTO) {
-        if (provaDTO == null || provaDTO.getTitulo() == null || provaDTO.getQuestoesIds() == null || provaDTO.getTurmaId() == null) {
+    public ProvaResponseDTO update(Long aLong, ProvaRequestDTO provaRequestDTO) {
+        if (provaRequestDTO == null || provaRequestDTO.getTitulo() == null || provaRequestDTO.getQuestoesIds() == null || provaRequestDTO.getTurmaId() == null) {
             throw new RuntimeException("Prova não encontrada com o id: " + aLong);
         }
 
@@ -48,16 +49,16 @@ public class ProvaService implements BaseServiceNew<ProvaDTO, Long> {
             throw new RuntimeException("Prova não encontrada com o id: " + aLong);
         }
 
-        return entityToDTO(provaRepository.save(dtoToEntity(provaDTO)));
+        return convertToProvaResponseDTO(provaRepository.save(convertToProva(provaRequestDTO)));
     }
 
     @Override
-    public ProvaDTO create(ProvaDTO provaDTO) {
-        if (provaDTO == null || provaDTO.getTitulo() == null || provaDTO.getQuestoesIds() == null || provaDTO.getTurmaId() == null) {
-            throw new RuntimeException("Prova não encontrada com o id: " + provaDTO.getId());
+    public ProvaResponseDTO create(ProvaRequestDTO provaRequestDTO) {
+        if (provaRequestDTO == null || provaRequestDTO.getTitulo() == null || provaRequestDTO.getQuestoesIds() == null || provaRequestDTO.getTurmaId() == null) {
+            throw new RuntimeException("Prova não encontrada com o id: " + provaRequestDTO.getId());
         }
 
-        return entityToDTO(provaRepository.save(dtoToEntity(provaDTO)));
+        return convertToProvaResponseDTO(provaRepository.save(convertToProva(provaRequestDTO)));
     }
 
     @Override
@@ -69,7 +70,7 @@ public class ProvaService implements BaseServiceNew<ProvaDTO, Long> {
         provaRepository.deleteById(aLong);
     }
 
-    private ProvaDTO entityToDTO(Prova prova) {
+    private ProvaResponseDTO convertToProvaResponseDTO(Prova prova) {
         if (prova == null) {
             return null;
         }
@@ -77,7 +78,7 @@ public class ProvaService implements BaseServiceNew<ProvaDTO, Long> {
                 .map(Questao::getId)
                 .collect(Collectors.toSet());
 
-        return new ProvaDTO(
+        return new ProvaResponseDTO(
                 prova.getId(),
                 prova.getTitulo(),
                 prova.getTurma().getId(),
@@ -86,17 +87,17 @@ public class ProvaService implements BaseServiceNew<ProvaDTO, Long> {
         );
     }
 
-    private Prova dtoToEntity(ProvaDTO provaDTO) {
-        if (provaDTO == null) {
+    private Prova convertToProva(ProvaRequestDTO provaRequestDTO) {
+        if (provaRequestDTO == null) {
             return null;
         }
 
         Prova prova = new Prova();
-        prova.setId(provaDTO.getId());
-        prova.setTurma(turmaRepository.findById(provaDTO.getTurmaId()).orElseThrow(() -> new RuntimeException("Turma não encontrada com o id: " + provaDTO.getTurmaId())));
-        prova.setNota(provaDTO.getNota());
-        prova.setTitulo(provaDTO.getTitulo());
-        prova.setQuestoes(provaDTO.getQuestoesIds().stream()
+        prova.setId(provaRequestDTO.getId());
+        prova.setTurma(turmaRepository.findById(provaRequestDTO.getTurmaId()).orElseThrow(() -> new RuntimeException("Turma não encontrada com o id: " + provaRequestDTO.getTurmaId())));
+        prova.setNota(provaRequestDTO.getNota());
+        prova.setTitulo(provaRequestDTO.getTitulo());
+        prova.setQuestoes(provaRequestDTO.getQuestoesIds().stream()
                 .map(id -> questaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Questão não encontrada com o id: " + id)))
                 .collect(Collectors.toSet()));
 

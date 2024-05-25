@@ -1,6 +1,7 @@
 package com.provodromo.provodromo.service;
 
-import com.provodromo.provodromo.dto.TurmaDTO;
+import com.provodromo.provodromo.dto.request.TurmaRequestDTO;
+import com.provodromo.provodromo.dto.response.TurmaResponseDTO;
 import com.provodromo.provodromo.model.Turma;
 import com.provodromo.provodromo.repository.TurmaRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
@@ -12,29 +13,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class TurmaService implements BaseServiceNew<TurmaDTO, Long> {
+public class TurmaService implements BaseServiceNew<TurmaRequestDTO, TurmaResponseDTO, Long> {
     @Autowired
     private TurmaRepository turmaRepository;
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public TurmaDTO findById(Long id) {
+    public TurmaResponseDTO findById(Long id) {
         Turma turma = turmaRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("Turma não encontrada com o ID: " + id)
         );
 
-        return entityToDTO(turma);
+        return convertToTurmaResponseDTO(turma);
     }
 
     @Override
-    public Set<TurmaDTO> findAll() {
-        return turmaRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toSet());
+    public Set<TurmaResponseDTO> findAll() {
+        return turmaRepository.findAll().stream().map(this::convertToTurmaResponseDTO).collect(Collectors.toSet());
     }
 
     @Override
-    public TurmaDTO update(Long id, TurmaDTO turmaDTO) {
-        if (turmaDTO == null || turmaDTO.getNome() == null || turmaDTO.getProfessorId() == null) {
+    public TurmaResponseDTO update(Long id, TurmaRequestDTO turmaRequestDTO) {
+        if (turmaRequestDTO == null || turmaRequestDTO.getNome() == null || turmaRequestDTO.getProfessorId() == null) {
             throw new IllegalArgumentException("Dados da Turma inválidos");
         }
 
@@ -42,16 +43,16 @@ public class TurmaService implements BaseServiceNew<TurmaDTO, Long> {
             throw new IllegalArgumentException("Turma não encontrada com o ID: " + id);
         }
 
-        return entityToDTO(turmaRepository.save(dtoToEntity(turmaDTO)));
+        return convertToTurmaResponseDTO(turmaRepository.save(convertToTurma(turmaRequestDTO)));
     }
 
     @Override
-    public TurmaDTO create(TurmaDTO turmaDTO) {
-        if (turmaDTO == null || turmaDTO.getNome() == null || turmaDTO.getProfessorId() == null) {
+    public TurmaResponseDTO create(TurmaRequestDTO turmaRequestDTO) {
+        if (turmaRequestDTO == null || turmaRequestDTO.getNome() == null || turmaRequestDTO.getProfessorId() == null) {
             throw new IllegalArgumentException("Dados da Turma inválidos");
         }
 
-        return entityToDTO(turmaRepository.save(dtoToEntity(turmaDTO)));
+        return convertToTurmaResponseDTO(turmaRepository.save(convertToTurma(turmaRequestDTO)));
     }
 
     @Override
@@ -63,26 +64,26 @@ public class TurmaService implements BaseServiceNew<TurmaDTO, Long> {
         turmaRepository.deleteById(aLong);
     }
 
-    private TurmaDTO entityToDTO(Turma turma) {
+    private TurmaResponseDTO convertToTurmaResponseDTO(Turma turma) {
         if (turma == null) {
             return null;
         }
 
-        return new TurmaDTO(
+        return new TurmaResponseDTO(
                 turma.getNome(),
                 turma.getProfessor().getId()
         );
     }
 
-    private Turma dtoToEntity(TurmaDTO turmaDTO) {
-        if (turmaDTO == null) {
+    private Turma convertToTurma(TurmaRequestDTO turmaRequestDTO) {
+        if (turmaRequestDTO == null) {
             return null;
         }
 
         Turma turma = new Turma();
-        turma.setNome(turmaDTO.getNome());
-        turma.setProfessor(usuarioRepository.findById(turmaDTO.getProfessorId()).orElseThrow(
-                () -> new IllegalArgumentException("Professor não encontrado com o ID: " + turmaDTO.getProfessorId())
+        turma.setNome(turmaRequestDTO.getNome());
+        turma.setProfessor(usuarioRepository.findById(turmaRequestDTO.getProfessorId()).orElseThrow(
+                () -> new IllegalArgumentException("Professor não encontrado com o ID: " + turmaRequestDTO.getProfessorId())
         ));
 
         return turma;

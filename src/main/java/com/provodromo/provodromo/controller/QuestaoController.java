@@ -1,7 +1,8 @@
 package com.provodromo.provodromo.controller;
 
 import com.provodromo.provodromo.controller.base.BaseController;
-import com.provodromo.provodromo.dto.QuestaoDTO;
+import com.provodromo.provodromo.dto.request.QuestaoRequestDTO;
+import com.provodromo.provodromo.dto.response.QuestaoResponseDTO;
 import com.provodromo.provodromo.service.QuestaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/questao", produces = {"application/json"})
-public class QuestaoController implements BaseController<QuestaoDTO> {
+public class QuestaoController implements BaseController<QuestaoRequestDTO, QuestaoResponseDTO> {
 
     @Autowired
     private QuestaoService questaoService;
@@ -20,31 +21,31 @@ public class QuestaoController implements BaseController<QuestaoDTO> {
     @GetMapping("/listar")
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public Set<QuestaoDTO> listar() {
+    public Set<QuestaoResponseDTO> listar() {
         return questaoService.findAll();
     }
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    public QuestaoDTO criar(@Valid @RequestBody QuestaoDTO questaoDTO) {
+    public QuestaoResponseDTO criar(@Valid @RequestBody QuestaoRequestDTO questaoRequestDTO) {
 
-        return questaoService.create(questaoDTO);
+        return questaoService.create(questaoRequestDTO);
     }
 
     @GetMapping("/buscar/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public QuestaoDTO buscar(@PathVariable Long id) {
+    public QuestaoResponseDTO buscar(@PathVariable Long id) {
         return questaoService.findById(id);
     }
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public QuestaoDTO atualizar(@PathVariable Long id, @Valid @RequestBody QuestaoDTO questaoDTO) {
+    public QuestaoResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody QuestaoRequestDTO questaoRequestDTO) {
 
-        return questaoService.update(id, questaoDTO);
+        return questaoService.update(id, questaoRequestDTO);
     }
 
     @GetMapping("/excluir/{id}")

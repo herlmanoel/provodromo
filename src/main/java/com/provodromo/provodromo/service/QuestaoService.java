@@ -1,7 +1,9 @@
 package com.provodromo.provodromo.service;
 
-import com.provodromo.provodromo.dto.AlternativaDTO;
-import com.provodromo.provodromo.dto.QuestaoDTO;
+import com.provodromo.provodromo.dto.request.AlternativaRequestDTO;
+import com.provodromo.provodromo.dto.request.QuestaoRequestDTO;
+import com.provodromo.provodromo.dto.response.AlternativaResponseDTO;
+import com.provodromo.provodromo.dto.response.QuestaoResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.Alternativa;
 import com.provodromo.provodromo.model.Questao;
@@ -16,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class QuestaoService implements BaseServiceNew<QuestaoDTO, Long> {
+public class QuestaoService implements BaseServiceNew<QuestaoRequestDTO, QuestaoResponseDTO, Long> {
 
     @Autowired
     private QuestaoRepository questaoRepository;
@@ -25,15 +27,15 @@ public class QuestaoService implements BaseServiceNew<QuestaoDTO, Long> {
 
 
     @Override
-    public QuestaoDTO findById(Long id) {
+    public QuestaoResponseDTO findById(Long id) {
         Questao questao = questaoRepository.findById(id).orElseThrow(() -> new RegraNegocioException("Questão não encontrada com o ID: " + id));
 
-        return entityToDTO(questao);
+        return convertToQuestaoResponseDTO(questao);
     }
 
     @Override
-    public Set<QuestaoDTO> findAll() {
-        return questaoRepository.findAll().stream().map(this::entityToDTO).collect(Collectors.toSet());
+    public Set<QuestaoResponseDTO> findAll() {
+        return questaoRepository.findAll().stream().map(this::convertToQuestaoResponseDTO).collect(Collectors.toSet());
     }
 
     @Override
@@ -46,17 +48,17 @@ public class QuestaoService implements BaseServiceNew<QuestaoDTO, Long> {
     }
 
     @Override
-    public QuestaoDTO create(QuestaoDTO questaoDTO) {
-        if (questaoDTO == null || questaoDTO.getTexto() == null || questaoDTO.getAlternativas() == null) {
+    public QuestaoResponseDTO create(QuestaoRequestDTO questaoRequestDTO) {
+        if (questaoRequestDTO == null || questaoRequestDTO.getTexto() == null || questaoRequestDTO.getAlternativas() == null) {
             throw new IllegalArgumentException("Dados da Questão inválidos");
         }
 
-        return createOrUpdate(questaoDTO);
+        return createOrUpdate(questaoRequestDTO);
     }
 
     @Override
-    public QuestaoDTO update(Long id, QuestaoDTO questaoDTO) {
-        if (questaoDTO == null || questaoDTO.getTexto() == null || questaoDTO.getAlternativas() == null) {
+    public QuestaoResponseDTO update(Long id, QuestaoRequestDTO questaoRequestDTO) {
+        if (questaoRequestDTO == null || questaoRequestDTO.getTexto() == null || questaoRequestDTO.getAlternativas() == null) {
             throw new RegraNegocioException("Dados da Questão inválidos");
         }
 
@@ -64,55 +66,55 @@ public class QuestaoService implements BaseServiceNew<QuestaoDTO, Long> {
             throw new RegraNegocioException("Questão não encontrada com o ID: " + id);
         }
 
-        questaoDTO.setId(id);
+        questaoRequestDTO.setId(id);
 
-        return createOrUpdate(questaoDTO);
+        return createOrUpdate(questaoRequestDTO);
     }
 
-    public QuestaoDTO createOrUpdate(QuestaoDTO questaoDTO) {
-        if (questaoDTO == null || questaoDTO.getTexto() == null) {
+    public QuestaoResponseDTO createOrUpdate(QuestaoRequestDTO questaoRequestDTO) {
+        if (questaoRequestDTO == null || questaoRequestDTO.getTexto() == null) {
             throw new IllegalArgumentException("Dados da Questão inválidos");
         }
-        List<Alternativa> alternativas = questaoDTO.getAlternativas().stream().map(this::convertToAlternativa).toList();
-        questaoDTO.setAlternativas(null);
-        Questao questao = dtoToEntity(questaoDTO);
+        List<Alternativa> alternativas = questaoRequestDTO.getAlternativas().stream().map(this::convertToAlternativa).toList();
+        questaoRequestDTO.setAlternativas(null);
+        Questao questao = dtoToEntity(questaoRequestDTO);
         questaoRepository.save(questao);
         alternativas.forEach(alternativa -> alternativa.setQuestao(questao));
         alternativaRepository.saveAll(alternativas);
         questao.setAlternativas(alternativas);
 
-        return entityToDTO(questao);
+        return convertToQuestaoResponseDTO(questao);
     }
 
-    private QuestaoDTO entityToDTO(Questao questao) {
+    private QuestaoResponseDTO convertToQuestaoResponseDTO(Questao questao) {
         if (questao == null) {
             return null;
         }
-        List<AlternativaDTO> alternativasDTO = questao.getAlternativas().stream()
-                .map(this::converToAlternativaDTO)
+        List<AlternativaResponseDTO> alternativasResponseDTO = questao.getAlternativas().stream()
+                .map(this::converToAlternativaResponseDTO)
                 .toList();
 
-        return new QuestaoDTO(
+        return new QuestaoResponseDTO(
                 questao.getId(),
                 questao.getTexto(),
                 questao.getDificuldade(),
                 questao.getNota(),
-                alternativasDTO
+                alternativasResponseDTO
         );
     }
 
-    private Questao dtoToEntity(QuestaoDTO questaoDTO) {
-        if (questaoDTO == null) {
+    private Questao dtoToEntity(QuestaoRequestDTO questaoRequestDTO) {
+        if (questaoRequestDTO == null) {
             return null;
         }
 
         Questao questao = new Questao();
-        questao.setId(questaoDTO.getId());
-        questao.setTexto(questaoDTO.getTexto());
-        questao.setDificuldade(questaoDTO.getDificuldade());
-        questao.setNota(questaoDTO.getNota());
-        if (questaoDTO.getAlternativas() != null) {
-            List<Alternativa> alternativas = questaoDTO.getAlternativas().stream()
+        questao.setId(questaoRequestDTO.getId());
+        questao.setTexto(questaoRequestDTO.getTexto());
+        questao.setDificuldade(questaoRequestDTO.getDificuldade());
+        questao.setNota(questaoRequestDTO.getNota());
+        if (questaoRequestDTO.getAlternativas() != null) {
+            List<Alternativa> alternativas = questaoRequestDTO.getAlternativas().stream()
                     .map(this::convertToAlternativa)
                     .toList();
             questao.setAlternativas(alternativas);
@@ -121,21 +123,21 @@ public class QuestaoService implements BaseServiceNew<QuestaoDTO, Long> {
         return questao;
     }
 
-    private AlternativaDTO converToAlternativaDTO(Alternativa alternativa) {
+    private AlternativaResponseDTO converToAlternativaResponseDTO(Alternativa alternativa) {
         if (alternativa == null) {
             return null;
         }
-        return new AlternativaDTO(alternativa.getId(), alternativa.getTexto(), alternativa.isCorreta());
+        return new AlternativaResponseDTO(alternativa.getId(), alternativa.getTexto(), alternativa.isCorreta());
     }
 
-    private Alternativa convertToAlternativa(AlternativaDTO alternativaDTO) {
-        if (alternativaDTO == null) {
+    private Alternativa convertToAlternativa(AlternativaRequestDTO alternativaRequestDTO) {
+        if (alternativaRequestDTO == null) {
             return null;
         }
         Alternativa alternativa = new Alternativa();
-        alternativa.setId(alternativaDTO.getId());
-        alternativa.setTexto(alternativaDTO.getTexto());
-        alternativa.setCorreta(alternativaDTO.isCorreta());
+        alternativa.setId(alternativaRequestDTO.getId());
+        alternativa.setTexto(alternativaRequestDTO.getTexto());
+        alternativa.setCorreta(alternativaRequestDTO.isCorreta());
         return alternativa;
     }
 }

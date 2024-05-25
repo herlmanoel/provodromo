@@ -1,4 +1,4 @@
-package com.provodromo.provodromo.dto;
+package com.provodromo.provodromo.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class TipoUsuarioDTO {
+public class TipoUsuarioRequestDTO {
 
     @NotBlank(message = "O nome não pode estar em branco")
     @Size(min = 2, max = 50, message = "O nome deve ter entre 2 e 50 caracteres")

@@ -2,11 +2,11 @@ package com.provodromo.provodromo.service.base;
 
 import java.util.Set;
 
-public interface BaseServiceNew<DTO, ID> {
+public interface BaseServiceNew<RequestDTO, ResponseDTO, ID> {
 
-    DTO findById(ID id);
-    Set<DTO> findAll();
-    DTO update(ID id, DTO dto);
-    DTO create(DTO dto);
+    ResponseDTO findById(ID id);
+    Set<ResponseDTO> findAll();
+    ResponseDTO update(ID id, RequestDTO dto);
+    ResponseDTO create(RequestDTO dto);
     void deleteById(ID id);
 }

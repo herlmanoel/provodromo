@@ -1,15 +1,15 @@
-package com.provodromo.provodromo.dto;
+package com.provodromo.provodromo.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class LoginDTO {
-    private String nome;
+public class LoginResponseDTO {
     private String token;
-    private String email;
-    private String senha;
+    private Instant expiracao;
 }

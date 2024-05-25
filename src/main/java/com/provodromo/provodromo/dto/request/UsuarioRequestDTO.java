@@ -1,4 +1,4 @@
-package com.provodromo.provodromo.dto;
+package com.provodromo.provodromo.dto.request;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioDTO {
+public class UsuarioRequestDTO {
         private Long id;
 
         @NotBlank(message = "O nome não pode estar em branco")
@@ -26,5 +26,5 @@ public class UsuarioDTO {
         @Size(min = 6, max = 255, message = "A senha deve ter entre 6 e 255 caracteres")
         private String senha;
 
-        private TipoUsuarioDTO tipoUsuario;
+        private TipoUsuarioRequestDTO tipoUsuario;
 }

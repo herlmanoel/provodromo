@@ -1,6 +1,7 @@
 package com.provodromo.provodromo.service;
 
-import com.provodromo.provodromo.dto.LoginDTO;
+import com.provodromo.provodromo.dto.request.LoginRequestDTO;
+import com.provodromo.provodromo.dto.response.LoginResponseDTO;
 import com.provodromo.provodromo.error.exception.CredenciaisInvalidasException;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.Usuario;
@@ -18,16 +19,18 @@ public class AutenticacaoService {
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
 
-    public String login(LoginDTO loginDTO) {
-        Usuario usuario = usuarioRepository.findByEmail(loginDTO.getEmail());
-        validarCredenciais(usuario, loginDTO.getSenha());
-        return tokenService.generateToken(usuario);
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        Usuario usuario = usuarioRepository.findByEmail(loginRequestDTO.getEmail());
+        validarCredenciais(usuario, loginRequestDTO.getSenha());
+
+        return criarLoginResponseDTO(usuario);
     }
 
-    public String register(LoginDTO loginDTO) {
-        validarUsuarioExistente(loginDTO.getEmail());
-        Usuario newUser = criarNovoUsuario(loginDTO);
-        return tokenService.generateToken(newUser);
+    public LoginResponseDTO register(LoginRequestDTO loginRequestDTO) {
+        validarUsuarioExistente(loginRequestDTO.getEmail());
+        Usuario newUser = criarNovoUsuario(loginRequestDTO);
+
+        return criarLoginResponseDTO(newUser);
     }
 
 
@@ -43,11 +46,18 @@ public class AutenticacaoService {
         }
     }
 
-    private Usuario criarNovoUsuario(LoginDTO loginDTO) {
+    private Usuario criarNovoUsuario(LoginRequestDTO loginRequestDTO) {
         Usuario newUser = new Usuario();
-        newUser.setSenha(passwordEncoder.encode(loginDTO.getSenha()));
-        newUser.setEmail(loginDTO.getEmail());
-        newUser.setNome(loginDTO.getNome());
+        newUser.setSenha(passwordEncoder.encode(loginRequestDTO.getSenha()));
+        newUser.setEmail(loginRequestDTO.getEmail());
+        newUser.setNome(loginRequestDTO.getNome());
         return usuarioRepository.save(newUser);
+    }
+
+    private LoginResponseDTO criarLoginResponseDTO(Usuario usuario) {
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+        loginResponseDTO.setToken(tokenService.generateToken(usuario));
+        loginResponseDTO.setExpiracao(tokenService.generateExpirationDate());
+        return loginResponseDTO;
     }
 }

@@ -1,4 +1,4 @@
-package com.provodromo.provodromo.dto;
+package com.provodromo.provodromo.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProvaDTO {
+public class ProvaRequestDTO {
     private Long id;
     private String titulo;
     private Long turmaId;

@@ -1,4 +1,4 @@
-package com.provodromo.provodromo.dto;
+package com.provodromo.provodromo.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +10,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class QuestaoDTO {
+public class QuestaoResponseDTO {
     private Long id;
     private String texto;
     private String dificuldade;
     private double nota;
-    private List<AlternativaDTO> alternativas = new ArrayList<>();
+    private List<AlternativaResponseDTO> alternativas = new ArrayList<>();
 }

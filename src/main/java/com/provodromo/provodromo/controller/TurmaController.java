@@ -1,7 +1,8 @@
 package com.provodromo.provodromo.controller;
 
 import com.provodromo.provodromo.controller.base.BaseController;
-import com.provodromo.provodromo.dto.TurmaDTO;
+import com.provodromo.provodromo.dto.request.TurmaRequestDTO;
+import com.provodromo.provodromo.dto.response.TurmaResponseDTO;
 import com.provodromo.provodromo.service.TurmaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,36 +13,36 @@ import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/turma", produces = {"application/json"})
-public class TurmaController implements BaseController<TurmaDTO> {
+public class TurmaController implements BaseController<TurmaRequestDTO, TurmaResponseDTO> {
     @Autowired
     private TurmaService turmaService;
 
     @GetMapping("/listar")
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public Set<TurmaDTO> listar() {
+    public Set<TurmaResponseDTO> listar() {
         return turmaService.findAll();
     }
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    public TurmaDTO criar(@Valid @RequestBody TurmaDTO turmaDTO) {
-        return turmaService.create(turmaDTO);
+    public TurmaResponseDTO criar(@Valid @RequestBody TurmaRequestDTO turmaRequestDTO) {
+        return turmaService.create(turmaRequestDTO);
     }
 
     @GetMapping("/buscar/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public TurmaDTO buscar(@PathVariable Long id) {
+    public TurmaResponseDTO buscar(@PathVariable Long id) {
         return turmaService.findById(id);
     }
 
     @PutMapping("/editar/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public TurmaDTO atualizar(@PathVariable Long id, @Valid @RequestBody TurmaDTO turmaDTO) {
-        return turmaService.update(id, turmaDTO);
+    public TurmaResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody TurmaRequestDTO turmaRequestDTO) {
+        return turmaService.update(id, turmaRequestDTO);
     }
 
     @DeleteMapping("/excluir/{id}")

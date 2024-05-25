@@ -1,48 +1,47 @@
  package com.provodromo.provodromo.controller;
 
  import com.provodromo.provodromo.controller.base.BaseController;
- import com.provodromo.provodromo.dto.UsuarioDTO;
+ import com.provodromo.provodromo.dto.request.UsuarioRequestDTO;
+ import com.provodromo.provodromo.dto.response.UsuarioResponseDTO;
  import com.provodromo.provodromo.service.UsuarioService;
  import jakarta.validation.Valid;
  import lombok.AllArgsConstructor;
  import org.springframework.http.HttpStatus;
  import org.springframework.web.bind.annotation.*;
 
- import java.util.ArrayList;
- import java.util.List;
  import java.util.Set;
 
  @RestController
  @RequestMapping(value = "/api/usuario", produces = {"application/json"})
  @AllArgsConstructor
- public class UsuarioController implements BaseController<UsuarioDTO> {
+ public class UsuarioController implements BaseController<UsuarioRequestDTO, UsuarioResponseDTO> {
 
      private final UsuarioService usuarioService;
 
      @GetMapping
      @Override
-     public Set<UsuarioDTO> listar() {
+     public Set<UsuarioResponseDTO> listar() {
          return usuarioService.findAll();
      }
 
      @PostMapping
      @ResponseStatus(HttpStatus.CREATED)
      @Override
-     public UsuarioDTO criar(@Valid @RequestBody UsuarioDTO usuario) {
-         return usuarioService.save(usuario);
+     public UsuarioResponseDTO criar(@Valid @RequestBody UsuarioRequestDTO usuario) {
+         return usuarioService.create(usuario);
      }
 
      @GetMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      @Override
-     public UsuarioDTO buscar(@PathVariable Long id) {
+     public UsuarioResponseDTO buscar(@PathVariable Long id) {
          return usuarioService.findById(id);
      }
 
      @PutMapping("/{id}")
      @ResponseStatus(HttpStatus.OK)
      @Override
-     public UsuarioDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioDTO usuario) {
+     public UsuarioResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody UsuarioRequestDTO usuario) {
          return usuarioService.update(id, usuario);
      }
 
@@ -55,7 +54,7 @@
 
      @PutMapping("/{usuarioId}/tipo/{tipoUsuarioId}")
      @ResponseStatus(HttpStatus.OK)
-     public UsuarioDTO associarTipoUsuario(@PathVariable Long usuarioId, @PathVariable Long tipoUsuarioId) {
+     public UsuarioResponseDTO associarTipoUsuario(@PathVariable Long usuarioId, @PathVariable Long tipoUsuarioId) {
          return usuarioService.associarTipoUsuario(usuarioId, tipoUsuarioId);
      }
  }

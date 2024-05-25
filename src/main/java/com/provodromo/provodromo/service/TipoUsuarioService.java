@@ -1,6 +1,7 @@
 package com.provodromo.provodromo.service;
 
-import com.provodromo.provodromo.dto.TipoUsuarioDTO;
+import com.provodromo.provodromo.dto.request.TipoUsuarioRequestDTO;
+import com.provodromo.provodromo.dto.response.TipoUsuarioResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
@@ -18,42 +19,42 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioDTO, Long> {
+public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioRequestDTO, TipoUsuarioResponseDTO, Long> {
 
     private final TipoUsuarioRepository repository;
     private final UsuarioRepository usuarioRepository;
 
     @Override
-    public TipoUsuarioDTO findById(Long id) {
+    public TipoUsuarioResponseDTO findById(Long id) {
         TipoUsuario tipoUsuario = repository.findById(id)
                 .orElseThrow(() -> new RegraNegocioException("Tipo de usuário não encontrado com o id: " + id));
-        return entityToDTO(tipoUsuario);
+        return convertToTipoUsuarioResponseDTO(tipoUsuario);
     }
 
     @Override
-    public Set<TipoUsuarioDTO> findAll() {
+    public Set<TipoUsuarioResponseDTO> findAll() {
         return repository.findAll().stream()
-                .map(this::entityToDTO)
+                .map(this::convertToTipoUsuarioResponseDTO)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public TipoUsuarioDTO update(Long id, TipoUsuarioDTO dto) {
-        TipoUsuario tipoUsuario = dtoToEntity(dto);
+    public TipoUsuarioResponseDTO update(Long id, TipoUsuarioRequestDTO dto) {
+        TipoUsuario tipoUsuario = convertToTipoUsuario(dto);
         if (!repository.existsById(id)) {
             throw new RegraNegocioException("Tipo de usuário não encontrado com o id: " + id);
         }
         tipoUsuario.setId(id);
-        return entityToDTO(repository.save(tipoUsuario));
+        return convertToTipoUsuarioResponseDTO(repository.save(tipoUsuario));
     }
 
     @Override
-    public TipoUsuarioDTO create(TipoUsuarioDTO dto) {
+    public TipoUsuarioResponseDTO create(TipoUsuarioRequestDTO dto) {
         if (repository.findByNome(dto.getNome()) != null) {
             throw new RegraNegocioException("Já existe um tipo de usuário com o nome: " + dto.getNome());
         }
-        TipoUsuario tipoUsuario = dtoToEntity(dto);
-        return entityToDTO(repository.save(tipoUsuario));
+        TipoUsuario tipoUsuario = convertToTipoUsuario(dto);
+        return convertToTipoUsuarioResponseDTO(repository.save(tipoUsuario));
     }
 
     @Override
@@ -74,22 +75,22 @@ public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioDTO, Long> 
         }
     }
 
-    public TipoUsuarioDTO findByName(String name) {
+    public TipoUsuarioResponseDTO findByName(String name) {
         TipoUsuario tipoUsuario = repository.findByNome(name);
         if (tipoUsuario == null) {
             throw new RegraNegocioException("Tipo de usuário não encontrado com o nome: " + name);
         }
-        return entityToDTO(tipoUsuario);
+        return convertToTipoUsuarioResponseDTO(tipoUsuario);
     }
 
-    private TipoUsuario dtoToEntity(TipoUsuarioDTO dto) {
+    private TipoUsuario convertToTipoUsuario(TipoUsuarioRequestDTO dto) {
         TipoUsuario entity = new TipoUsuario();
         entity.setNome(dto.getNome());
         return entity;
     }
 
-    private TipoUsuarioDTO entityToDTO(TipoUsuario entity) {
-        TipoUsuarioDTO dto = new TipoUsuarioDTO();
+    private TipoUsuarioResponseDTO convertToTipoUsuarioResponseDTO(TipoUsuario entity) {
+        TipoUsuarioResponseDTO dto = new TipoUsuarioResponseDTO();
         dto.setNome(entity.getNome());
         return dto;
     }
