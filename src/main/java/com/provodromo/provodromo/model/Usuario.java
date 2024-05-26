@@ -13,6 +13,10 @@ public class Usuario extends BaseModel {
     private String email;
     private String senha;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dados_pessoais_id", referencedColumnName = "id")
+    private DadosPessoais dadosPessoais;
+
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "tipo_usuario_id")
     private TipoUsuario tipoUsuario;

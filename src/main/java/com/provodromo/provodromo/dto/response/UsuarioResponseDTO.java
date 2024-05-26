@@ -1,8 +1,6 @@
 package com.provodromo.provodromo.dto.response;
 
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +14,5 @@ public class UsuarioResponseDTO {
         private String nome;
         private String email;
         private String tipoUsuario;
+        private DadosPessoaisResponseDTO dadosPessoais;
 }

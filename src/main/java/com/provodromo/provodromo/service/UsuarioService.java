@@ -2,9 +2,10 @@ package com.provodromo.provodromo.service;
 
 import com.provodromo.provodromo.dto.request.TipoUsuarioRequestDTO;
 import com.provodromo.provodromo.dto.request.UsuarioRequestDTO;
-import com.provodromo.provodromo.dto.response.TipoUsuarioResponseDTO;
+import com.provodromo.provodromo.dto.response.DadosPessoaisResponseDTO;
 import com.provodromo.provodromo.dto.response.UsuarioResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
+import com.provodromo.provodromo.model.DadosPessoais;
 import com.provodromo.provodromo.model.TipoUsuario;
 import com.provodromo.provodromo.model.Usuario;
 
@@ -111,9 +112,27 @@ public class UsuarioService implements BaseServiceNew<UsuarioRequestDTO, Usuario
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEmail(),
-                usuario.getTipoUsuario().getNome()
+                usuario.getTipoUsuario().getNome(),
+                this.convertToDadosPessoaisDTO(usuario.getDadosPessoais())
         );
     }
+
+    private DadosPessoaisResponseDTO convertToDadosPessoaisDTO(DadosPessoais dadosPessoais) {
+        if (dadosPessoais == null) {
+            return null;
+        }
+        return new DadosPessoaisResponseDTO(
+                dadosPessoais.getId(),
+                dadosPessoais.getDataNascimento(),
+                dadosPessoais.getCpf(),
+                dadosPessoais.getTelefone(),
+                dadosPessoais.getUf(),
+                dadosPessoais.getCidade(),
+                dadosPessoais.getRua(),
+                dadosPessoais.getNumero(),
+                dadosPessoais.getComplemento()
+        );
+    };
 
     private Usuario convertToUsuario(UsuarioRequestDTO dto) {
         if (dto == null) {
