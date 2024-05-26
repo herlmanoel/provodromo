@@ -5,7 +5,7 @@ import com.provodromo.provodromo.dto.response.TurmaResponseDTO;
 import com.provodromo.provodromo.model.Turma;
 import com.provodromo.provodromo.repository.TurmaRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
-import com.provodromo.provodromo.service.base.BaseServiceNew;
+import com.provodromo.provodromo.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class TurmaService implements BaseServiceNew<TurmaRequestDTO, TurmaResponseDTO, Long> {
+public class TurmaService implements BaseService<TurmaRequestDTO, TurmaResponseDTO, Long> {
     @Autowired
     private TurmaRepository turmaRepository;
     @Autowired

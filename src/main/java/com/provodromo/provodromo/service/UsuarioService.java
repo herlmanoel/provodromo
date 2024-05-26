@@ -2,7 +2,6 @@ package com.provodromo.provodromo.service;
 
 import com.provodromo.provodromo.dto.request.TipoUsuarioRequestDTO;
 import com.provodromo.provodromo.dto.request.UsuarioRequestDTO;
-import com.provodromo.provodromo.dto.response.TipoUsuarioResponseDTO;
 import com.provodromo.provodromo.dto.response.UsuarioResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.TipoUsuario;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 
 import com.provodromo.provodromo.repository.TipoUsuarioRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
-import com.provodromo.provodromo.service.base.BaseServiceNew;
+import com.provodromo.provodromo.service.base.BaseService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UsuarioService implements BaseServiceNew<UsuarioRequestDTO, UsuarioResponseDTO, Long> {
+public class UsuarioService implements BaseService<UsuarioRequestDTO, UsuarioResponseDTO, Long> {
     private final UsuarioRepository usuarioRepository;
     private final TipoUsuarioRepository tipoUsuarioRepository;
     private final PasswordEncoder passwordEncoder;

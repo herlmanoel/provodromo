@@ -9,7 +9,7 @@ import com.provodromo.provodromo.model.Usuario;
 import com.provodromo.provodromo.repository.HistoricoTipoUsuarioRepository;
 import com.provodromo.provodromo.repository.TipoUsuarioRepository;
 import com.provodromo.provodromo.repository.UsuarioRepository;
-import com.provodromo.provodromo.service.base.BaseServiceNew;
+import com.provodromo.provodromo.service.base.BaseService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class TipoUsuarioService implements BaseServiceNew<TipoUsuarioRequestDTO, TipoUsuarioResponseDTO, Long> {
+public class TipoUsuarioService implements BaseService<TipoUsuarioRequestDTO, TipoUsuarioResponseDTO, Long> {
 
     private final TipoUsuarioRepository repository;
     private final UsuarioRepository usuarioRepository;
