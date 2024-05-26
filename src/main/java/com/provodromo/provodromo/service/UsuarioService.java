@@ -2,6 +2,7 @@ package com.provodromo.provodromo.service;
 
 import com.provodromo.provodromo.dto.request.TipoUsuarioRequestDTO;
 import com.provodromo.provodromo.dto.request.UsuarioRequestDTO;
+import com.provodromo.provodromo.dto.response.DadosPessoaisResponseDTO;
 import com.provodromo.provodromo.dto.response.UsuarioResponseDTO;
 import com.provodromo.provodromo.error.exception.RegraNegocioException;
 import com.provodromo.provodromo.model.DadosPessoais;
