@@ -1,13 +1,12 @@
 package com.provodromo.provodromo.service.base;
 
-import org.springframework.stereotype.Service;
-
 import java.util.Set;
 
-@Service
-public interface BaseService <T> {
-    T findById(Long id);
-    Set<T> findAll();
-    T save(T entity);
-    void deleteById(Long id);
+public interface BaseService<RequestDTO, ResponseDTO, ID> {
+
+    ResponseDTO findById(ID id);
+    Set<ResponseDTO> findAll();
+    ResponseDTO update(ID id, RequestDTO dto);
+    ResponseDTO create(RequestDTO dto);
+    void deleteById(ID id);
 }

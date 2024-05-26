@@ -7,7 +7,7 @@ import com.provodromo.provodromo.model.Questao;
 import com.provodromo.provodromo.repository.ProvaRepository;
 import com.provodromo.provodromo.repository.QuestaoRepository;
 import com.provodromo.provodromo.repository.TurmaRepository;
-import com.provodromo.provodromo.service.base.BaseServiceNew;
+import com.provodromo.provodromo.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class ProvaService implements BaseServiceNew<ProvaRequestDTO, ProvaResponseDTO, Long> {
+public class ProvaService implements BaseService<ProvaRequestDTO, ProvaResponseDTO, Long> {
 
     @Autowired
     private ProvaRepository provaRepository;
