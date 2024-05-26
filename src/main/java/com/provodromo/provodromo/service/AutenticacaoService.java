@@ -26,32 +26,11 @@ public class AutenticacaoService {
         return criarLoginResponseDTO(usuario);
     }
 
-    public LoginResponseDTO register(LoginRequestDTO loginRequestDTO) {
-        validarUsuarioExistente(loginRequestDTO.getEmail());
-        Usuario newUser = criarNovoUsuario(loginRequestDTO);
-
-        return criarLoginResponseDTO(newUser);
-    }
-
 
     private void validarCredenciais(Usuario usuario, String senha) {
         if (usuario == null || !passwordEncoder.matches(senha, usuario.getSenha())) {
             throw new CredenciaisInvalidasException("Credenciais inválidas");
         }
-    }
-
-    private void validarUsuarioExistente(String email) {
-        if (usuarioRepository.existsByEmail(email)) {
-            throw new RegraNegocioException("Já existe um usuário com o e-mail fornecido");
-        }
-    }
-
-    private Usuario criarNovoUsuario(LoginRequestDTO loginRequestDTO) {
-        Usuario newUser = new Usuario();
-        newUser.setSenha(passwordEncoder.encode(loginRequestDTO.getSenha()));
-        newUser.setEmail(loginRequestDTO.getEmail());
-        newUser.setNome(loginRequestDTO.getNome());
-        return usuarioRepository.save(newUser);
     }
 
     private LoginResponseDTO criarLoginResponseDTO(Usuario usuario) {
