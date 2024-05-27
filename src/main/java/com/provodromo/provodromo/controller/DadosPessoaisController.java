@@ -28,18 +28,6 @@ public class DadosPessoaisController {
         return dadosPessoaisService.findById(id);
     }
 
-    @GetMapping("/nome")
-    @ResponseStatus(HttpStatus.OK)
-    public DadosPessoaisResponseDTO buscarByNomeUsuario(@RequestBody String nome) {
-        return dadosPessoaisService.findByNomeUsuario(nome);
-    }
-
-    @GetMapping("/cpf")
-    @ResponseStatus(HttpStatus.OK)
-    public DadosPessoaisResponseDTO buscarByCpf(@RequestBody String cpf) {
-        return dadosPessoaisService.findByCpf(cpf);
-    }
-
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public DadosPessoaisResponseDTO atualizar(@PathVariable Long id, @Valid @RequestBody DadosPessoaisUpdateRequestDTO dados) {
